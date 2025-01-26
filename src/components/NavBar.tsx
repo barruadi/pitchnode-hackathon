@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Navbar() {    
     return (
-        <div className="flex justify-between items-center w-full p-2 border-2 border-black rounded-2xl shadow-md">
+        <div className="flex justify-between items-center w-fill p-2 border-2 border-black rounded-2xl shadow-md m-5">
             <div className="font-bold px-5">
                 <Link to="/">PitchNode</Link>
             </div>
