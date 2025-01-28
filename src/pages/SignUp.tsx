@@ -1,5 +1,50 @@
+import React, { useState } from 'react';
+// import { createBackendActor } from '../declarations/backend';
+import { create } from "ipfs-http-client"
 
-function SignUp() {
+interface IpfsResponse {
+    path: string;
+    size: number;
+    cid: {
+        toString: () => string;
+    };
+}
+
+const ipfs = create({ host: "ipfs.infura.io", port: 5001, protocol: "https" });
+
+const SignUp: React.FC = () => {
+    const [username, setUsername] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+  
+    // Signup handler
+    const handleSignup = async () => {
+        setLoading(true);
+  
+        try {
+        // Step 1: Upload description to IPFS
+            const added: IpfsResponse = await ipfs.add(description);
+            const ipfsCID = added.path;
+            console.log("Uploaded to IPFS with CID:", ipfsCID);
+            
+            // Step 2: Call backend to register the username and IPFS CID
+            // const backend = createBackendActor();
+            // const result: boolean = await backend.signUp(username, ipfsCID) as boolean;
+            
+            // if (result) {
+            //   alert("Sign-up successful!");
+            // } else {
+            //   alert("Username is already taken.");
+            // }
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("An error occurred. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return (
         <div className="flex justify-between items-center h-screen">
             <div className="w-1/2 px-8">
@@ -18,7 +63,7 @@ function SignUp() {
                         Register New Account
                         </h1>
 
-                        <form>
+                        <form onSubmit={handleSignup}>
                         <div className="mb-6">
                             <label
                             htmlFor="username"
@@ -29,37 +74,24 @@ function SignUp() {
                             <input
                             type="text"
                             id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             placeholder="Type to input your name"
                             className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
                             />
                         </div>
-
                         <div className="mb-6">
                             <label
-                            htmlFor="password"
+                            htmlFor="username"
                             className="block text-white font-medium mb-2"
                             >
-                            Create Password
+                            Description
                             </label>
-                            <input
-                            type="password"
-                            id="password"
-                            placeholder="Type to create password"
-                            className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
-
-                        <div className="mb-6">
-                            <label
-                            htmlFor="confirm-password"
-                            className="block text-white font-medium mb-2"
-                            >
-                            Confirm Password
-                            </label>
-                            <input
-                            type="password"
-                            id="confirm-password"
-                            placeholder="Type to confirm password"
+                            <textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="set description"
                             className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
                             />
                         </div>
@@ -88,6 +120,6 @@ function SignUp() {
             </div>
         </div>
     );
-  }
-  
-  export default SignUp;
+}
+
+export default SignUp;

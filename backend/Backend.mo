@@ -1,18 +1,39 @@
-actor class Backend() {
-  stable var counter = 0;
+import Array "mo:base/Array";
+import List "mo:base/List";
 
-  // Get the current count
-  public query func get() : async Nat {
-    counter;
+actor UserManager {
+  // Stores metadata for each user (Principal ID → Description)
+  stable var users: [(Principal, Text)] = []; // (Principal ID, description)
+
+  // Register a user with their device ID (Principal ID)
+  public shared(ic) func signUp(description: Text): async Bool {
+    let caller = ic.caller; // Get the Principal ID of the caller
+
+    // Check if the user is already registered
+    // if (List.find(users, func(user) {
+    //   user.0 == caller;
+    // }) != null) {
+    //   return false; // User is already registered
+    // };
+
+    // Register the user with their Principal ID and description
+    users := Array.append(users, [(caller, description)]);
+    return true;
   };
 
-  // Increment the count by one
-  public func inc() : async () {
-    counter += 1;
-  };
+  // Query user metadata by Principal ID
+  // public shared(ic) func getUser(): async ?Text {
+  //   // let caller = ic.caller; // Get the Principal ID of the caller
 
-  // Add `n` to the current count
-  public func add(n : Nat) : async () {
-    counter += n;
-  };
-};
+  //   // let usersArray = users;
+
+  //   // Check if the user is already registered
+  //   // if (Array.find(usersArray, func(user) {
+  //   //   user.0 == caller;
+  //   // }) != null) {
+  //   //   return ?user.1; // User is already registered
+  //   // };
+
+  //   return null; // User not found
+  // };
+}
