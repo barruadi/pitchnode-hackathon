@@ -1,13 +1,18 @@
-import "./index.css";
-
-function IdeaCard() {
+interface IdeaCardProps {
+    title: string;
+    funded: number;
+    amount: number;
+    range: string;
+    investors: number;
+}
+export default function IdeaCard({ title, funded, amount, range, investors }: IdeaCardProps) {
     return (
         <div className="border-2 border-gray-200 rounded-2xl shadow-lg w-[350px] mx-auto flex flex-col bg-white">
             <div className="">
-                <img src="./image.png" alt="Idea Image" className="w-full" />
+                <img src="../assets/invest.png" alt="Idea Image" className="w-full" />
             </div>
             <div className="p-4">
-                <h2 className="text-xl font-bold text-gray-900">Idea Title #1</h2>
+                <h2 className="text-xl font-bold text-gray-900">{title}</h2>
                 <p className="text-black text-sm mt-2">
                     General overview of the idea. They can showcase their unique and innovative ideas here to raise funds based on their target etc etc.
                 </p>
@@ -16,26 +21,26 @@ function IdeaCard() {
             <div className="px-4">
                 <div className="flex justify-end items-center text-sm font-bold text-gray-800">
                     <span className="flex items-center">
-                        <span className="mx-1">69%</span> funded
+                        <span className="mx-1">{funded}%</span> funded
                     </span>
                 </div>
                 <div className="relative w-full h-2 mt-2 bg-gray-300 rounded-full">
-                    <div className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" style={{ width: "69%" }}></div>
+                    <div className="absolute h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" style={{ width: `${funded}%` }}></div>
                 </div>
             </div>
 
             <div className="flex justify-between px-4 mt-4 text-center text-sm text-black">
                 <div>
                     <p className="font-bold text-[#324286]">Indicator 1</p>
-                    <p className="text-lg font-semibold">$123K</p>
+                    <p className="text-lg font-semibold">${amount}K</p>
                 </div>
                 <div>
                 <p className="font-bold text-[#324286]">Indicator 2</p>
-                <p className="text-lg font-semibold">3-12%</p>
+                <p className="text-lg font-semibold">{range}</p>
                 </div>
                 <div>
                 <p className="font-bold text-[#324286]">Investors</p>
-                <p className="text-lg font-semibold">12</p>
+                <p className="text-lg font-semibold">{investors}</p>
                 </div>
             </div>
             <div className="flex justify-between px-4 py-4">
@@ -47,5 +52,5 @@ function IdeaCard() {
                 </button>
             </div>
         </div>
-    )
+    );
 }
