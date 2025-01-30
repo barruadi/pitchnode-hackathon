@@ -1,39 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { canisterId, createActor } from '../declarations/backend';
 import { AuthClient } from '@dfinity/auth-client';
 
-const SignUp: React.FC = () => {
-    const [authClient, setAuthClient] = useState<AuthClient | null>(null);
-    const [principal, setPrincipal] = useState<string | null>(null);
+const Register: React.FC = () => {
+    const [role, setRole] = useState<"Investor" | "Business">("Investor");
 
-    useEffect(() => {
-        async function initializeAuth() {
-            const client = await AuthClient.create();
-            setAuthClient(client);
-      
-            if (await client.isAuthenticated()) {
-              const identity = client.getIdentity();
-              setPrincipal(identity.getPrincipal().toText());
-            }
-          }
-          initializeAuth();
-        }, []);
+    const registerUser = async () => {
+        const authClient = await AuthClient.create();
+        const identity = authClient.getIdentity();
 
-    const login = async () => {
-        if (!authClient) return;
-    
-        await authClient.login({
-            identityProvider: "https://identity.ic0.app",
-            onSuccess: () => {
-                const identity = authClient.getIdentity();
-                setPrincipal(identity.getPrincipal().toText());
-                },
-            });
-        };
-    const logout = async () => {
-        await authClient?.logout();
-        setPrincipal(null);
-    };
+        const backend = createActor(canisterId, {
+            agentOptions: {
+                identity,
+            },
+        });
+        
+        const success = await backend.registerUser(role);
 
+        if (success) {
+            console.log('User registered successfully');
+        } else {
+            console.log('User registration failed');
+        }
+    }
 
     return (
         <div className="flex justify-between items-center h-screen">
@@ -50,25 +39,13 @@ const SignUp: React.FC = () => {
                 <div className="min-h-screen flex items-center justify-center px-4">
                     <div className="w-full lg:w-xl md:w-md sm:w-sm rounded-2xl p-8 mx-4">
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
-                        Sign In
+                        Register Role
                         </h1>
-
-                        <form onSubmit={login} className='space-y-6'>
-                            <button
-                                type="submit"
-                                className="w-full bg-white text-black font-medium py-2 my-5 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
-                            >
-                                login
-                        </button>
-                        </form>
-                        <form onSubmit={logout} className='space-y-6'>
-                            <button
-                                type="submit"
-                                className="w-full bg-white text-black font-medium py-2 my-5 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
-                            >
-                                logout
-                        </button>
-                        </form>
+                        <select value={role} onChange={(e) => setRole(e.target.value as "Investor" | "Business")} className="w-full bg-[#1E0A29] text-white p-2 rounded-lg">
+                            <option value="Investor">Investor</option>
+                            <option value="Business">Business</option>
+                        </select>
+                        <button onClick={registerUser} className='w-full bg-white rounded-full p-2 my-5'>Register</button>
                     </div>
                 </div>
             </div>
@@ -76,4 +53,4 @@ const SignUp: React.FC = () => {
     );
 }
 
-export default SignUp;
+export default Register;

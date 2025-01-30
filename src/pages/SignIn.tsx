@@ -1,77 +1,86 @@
+import React, { useEffect, useState } from 'react';
+import { AuthClient } from '@dfinity/auth-client';
 
-function SignIn() {
+const Auth: React.FC = () => {
+    const [authClient, setAuthClient] = useState<AuthClient | null>(null);
+    const [principal, setPrincipal] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function initializeAuth() {
+            const client = await AuthClient.create();
+            setAuthClient(client);
+      
+            if (await client.isAuthenticated()) {
+              const identity = client.getIdentity();
+              setPrincipal(identity.getPrincipal().toText());
+            }
+          }
+          initializeAuth();
+        }, []);
+
+    const login = async () => {
+        if (!authClient) return;
+    
+        await authClient.login({
+            // TODO: deploy canister and update identityProvider
+            identityProvider: "https://localhost:4943",
+            onSuccess: () => {
+                const identity = authClient.getIdentity();
+                setPrincipal(identity.getPrincipal().toText());
+                },
+            });
+        };
+    const logout = async () => {
+        await authClient?.logout();
+        setPrincipal(null);
+    };
+
+
     return (
         <div className="flex justify-between items-center h-screen">
             <div className="w-1/2 px-8">
                 <div className="mt-18 ml-10 mr-10">
-                    <h1 className="lg:text-2xl font-bold mb-1 md:text-2xl">Welcome to</h1>
-                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl">PitchNode</h1>
+                    <h1 className="lg:text-2xl font-bold mb-1 md:text-2xl sm:text-l">Welcome to</h1>
+                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl sm:text:4xl">PitchNode</h1>
                     <hr className="mb-24 1px"/>
                 </div>
                 <img src="../assets/welcome.svg" alt="Illustration" className=""/> 
             </div>
 
             <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">
-                <div className="min-h-screen flex flex-col justify-center items-center text-white px-4">
+                <div className="min-h-screen flex items-center justify-center px-4">
                     <div className="w-full lg:w-xl md:w-md sm:w-sm rounded-2xl p-8 mx-4">
-                        <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8">
-                        Sign in to your account
+                        <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
+                        Sign In
                         </h1>
-                        <form className="space-y-6">
-                        <div>
-                            <label
-                                htmlFor="username"
-                                className="block text-sm font-medium mb-1"
-                                >
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                id="username"
-                                placeholder="Type to input your name"
-                                className="w-full px-4 py-2 border border-gray-500 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
 
-                        <div>
-                            <label
-                                htmlFor="password"
-                                className="block text-sm font-medium mb-1"
-                                >
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                id="password"
-                                placeholder="Type to input your password"
-                                className="w-full px-4 py-2 border border-gray-500 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-white text-black font-medium py-2 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
-                        >
-                            Sign In
-                        </button>
-                        </form>
-
-                        <div className="mt-6 text-center">
-                            <p className="text-sm text-gray-400">
-                                Doesn’t have an account yet?{' '}
-                                <a
-                                href="/signup"
-                                className="text-[#9BAEFF] hover:underline"
-                                >
-                                Sign up
-                                </a>
-                            </p>
-                        </div>
+                        {!principal ? (
+                            <form onSubmit={login} className='space-y-6'>
+                            <button
+                                type="submit"
+                                className="w-full bg-white text-black font-medium py-2 my-5 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
+                            >
+                                login
+                            </button>
+                            </form>
+                        ) : (
+                            <>
+                            <p className='text-white'>logged in as : {principal}</p>
+                            <form onSubmit={logout} className='space-y-6'>
+                            <button
+                                type="submit"
+                                className="w-full bg-white text-black font-medium py-2 my-5 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
+                            >
+                                logout
+                            </button>
+                            </form>
+                        </>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
     );
-  }
-  
-  export default SignIn;
+}
+
+export default Auth;
