@@ -1,5 +1,29 @@
+import React, { useEffect, useState } from 'react';
+import { canisterId, createActor } from '../declarations/backend';
+import { AuthClient } from '@dfinity/auth-client';
 
-function SignUp() {
+const Register: React.FC = () => {
+    const [role, setRole] = useState<"Investor" | "Business">("Investor");
+
+    const registerUser = async () => {
+        const authClient = await AuthClient.create();
+        const identity = authClient.getIdentity();
+
+        const backend = createActor(canisterId, {
+            agentOptions: {
+                identity,
+            },
+        });
+        
+        const success = await backend.registerUser(role);
+
+        if (success) {
+            console.log('User registered successfully');
+        } else {
+            console.log('User registration failed');
+        }
+    }
+
     return (
         <div className="flex justify-between items-center h-screen">
             <div className="w-1/2 px-8">
@@ -15,79 +39,18 @@ function SignUp() {
                 <div className="min-h-screen flex items-center justify-center px-4">
                     <div className="w-full lg:w-xl md:w-md sm:w-sm rounded-2xl p-8 mx-4">
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
-                        Register New Account
+                        Register Role
                         </h1>
-
-                        <form>
-                        <div className="mb-6">
-                            <label
-                            htmlFor="username"
-                            className="block text-white font-medium mb-2"
-                            >
-                            Username
-                            </label>
-                            <input
-                            type="text"
-                            id="username"
-                            placeholder="Type to input your name"
-                            className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
-
-                        <div className="mb-6">
-                            <label
-                            htmlFor="password"
-                            className="block text-white font-medium mb-2"
-                            >
-                            Create Password
-                            </label>
-                            <input
-                            type="password"
-                            id="password"
-                            placeholder="Type to create password"
-                            className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
-
-                        <div className="mb-6">
-                            <label
-                            htmlFor="confirm-password"
-                            className="block text-white font-medium mb-2"
-                            >
-                            Confirm Password
-                            </label>
-                            <input
-                            type="password"
-                            id="confirm-password"
-                            placeholder="Type to confirm password"
-                            className="w-full px-4 py-2 border border-gray-400 rounded-lg bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-[#9BAEFF]"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-white text-black font-medium py-2 px-4 rounded-lg hover:bg-[#9BAEFF] transition"
-                        >
-                            Sign Up
-                        </button>
-                        </form>
-
-                        <div className="mt-6 text-center">
-                            <p className="text-sm text-gray-400">
-                                Already have an account?{' '}
-                                <a
-                                href="/signin"
-                                className="text-[#9BAEFF] hover:underline"
-                                >
-                                Sign in
-                                </a>
-                            </p>
-                        </div>
+                        <select value={role} onChange={(e) => setRole(e.target.value as "Investor" | "Business")} className="w-full bg-[#1E0A29] text-white p-2 rounded-lg">
+                            <option value="Investor">Investor</option>
+                            <option value="Business">Business</option>
+                        </select>
+                        <button onClick={registerUser} className='w-full bg-white rounded-full p-2 my-5'>Register</button>
                     </div>
                 </div>
             </div>
         </div>
     );
-  }
-  
-  export default SignUp;
+}
+
+export default Register;
