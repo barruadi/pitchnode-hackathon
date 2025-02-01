@@ -40,10 +40,6 @@ export default function IdeaCard({ title, description, raisedAmount, fundingGoal
                 <p className="font-bold text-[#324286]">Indicator 2</p>
                 <p className="text-lg font-semibold">{Number(id)}</p>
                 </div>
-                {/* <div>
-                <p className="font-bold text-[#324286]">Investors</p>
-                <p className="text-lg font-semibold">{investors}</p>
-                </div> */}
             </div>
             <div className="flex justify-between px-4 py-4">
                 <button className="w-1/2 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-md mr-2">

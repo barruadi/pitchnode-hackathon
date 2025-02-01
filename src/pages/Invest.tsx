@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import IdeaCard from "../components/IdeaCard";
 import Navbar from "../components/NavBar";
-import { canisterId, createActor } from "../declarations/backend";
 import backendActor from "../utils/backend";
 import { Principal } from "@dfinity/principal";
 
@@ -16,21 +15,6 @@ interface BusinessIdea {
 }
 
 const ExploreIdeas: React.FC  = () => {
-    // dummy data
-    const ideas = [
-        { title: "Idea Title #1", funded: 69, amount: 123, range: "3-12%", investors: 12 },
-        { title: "Idea Title #2", funded: 69, amount: 290, range: "7-9%", investors: 23 },
-        { title: "Idea Title #3", funded: 69, amount: 211, range: "6-14%", investors: 7 },
-        { title: "Idea Title #4", funded: 80, amount: 340, range: "5-10%", investors: 15 },
-        { title: "Idea Title #4", funded: 80, amount: 340, range: "5-10%", investors: 15 },
-        { title: "Idea Title #5", funded: 55, amount: 180, range: "2-8%", investors: 9 },
-    ];
-
-    // pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
-    const totalPages = Math.ceil(ideas.length / itemsPerPage);
-    
     
     // fetch backend data
     const [idea, setIdea] = useState<BusinessIdea[]>([]);
@@ -49,6 +33,10 @@ const ExploreIdeas: React.FC  = () => {
 
     }, []);
 
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 3;
+    const totalPages = Math.ceil(idea.length / itemsPerPage);
     const currentIdeas = idea.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
@@ -71,9 +59,6 @@ const ExploreIdeas: React.FC  = () => {
                         <IdeaCard key={index} {...idea} />
                     ))
                 }
-                {/* {currentIdeas.map((idea, index) => (
-                    <IdeaCard key={index} {...idea} />
-                ))} */}
             </div>
             
             
