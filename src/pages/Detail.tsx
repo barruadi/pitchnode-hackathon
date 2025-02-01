@@ -1,7 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import backendActor from "../utils/backend";
+import InvestCard from "../components/InvestIdeaCard";
 import ProgressBar from '../components/ProgressBar';
+import { Principal } from "@dfinity/principal";
 
-function Detail() {
+interface BusinessIdea {
+  id: bigint;
+  title: string;
+  owner: string;
+  description: string;
+  fundingGoal: bigint;
+  raisedAmount: bigint;
+}
+
+const Detail: React.FC = () => {
+  const { id }  = useParams();
+    const ideaId = Number(id);
+
+    const [idea, setIdea] = useState<BusinessIdea>({
+      id: BigInt(0),
+      title: "",
+      owner: "",
+      description: "",
+      fundingGoal: BigInt(0),
+      raisedAmount: BigInt(0),
+    });
+
+    const [totalInvestor, setTotalInvestor] = useState(0);
+    const [percentage, setPercentage] = useState(0);
+    const [remainingFund, setRemainingFund] = useState(0);
+
+    useEffect(() => {
+        const fetchInvestments = async () => {
+            try {
+              const totalInvestor = await backendActor.getTotalInvestor(BigInt(ideaId));
+              const ideaFetch = await backendActor.getIdeaDetail(BigInt(ideaId));
+              let remainingFunding = Number(ideaFetch.fundingGoal) - Number(ideaFetch.raisedAmount);
+                if (remainingFunding < 0) {
+                  remainingFunding = 0;
+                }
+              setRemainingFund(remainingFunding);
+              
+              const percentageBar = (Number(ideaFetch.raisedAmount) / Number(ideaFetch.fundingGoal)) * 100;
+              setPercentage(percentageBar);
+
+              const FormattedIdea = {
+                ...ideaFetch,
+                owner: Principal.from(ideaFetch.owner).toText(),
+              }
+              
+              setTotalInvestor(Number(totalInvestor));
+              setIdea(FormattedIdea);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchInvestments();
+    }, [ideaId]);
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 min-h-screen">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -17,42 +75,32 @@ function Detail() {
           </div>
 
           <div className="mb-6">
-            <ProgressBar progress={75}/>
+            <ProgressBar progress={percentage}/>
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Indicator 1</p>
-              <p className="text-2xl font-bold">$100K</p>
+              <p className="text-sm text-gray-600 mb-1">Funding Goals</p>
+              <p className="text-2xl font-bold">{Number(idea.fundingGoal)}</p>
             </div>
             <div className="p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Indicator 2</p>
+              <p className="text-sm text-gray-600 mb-1">Equity</p>
               <p className="text-2xl font-bold">3-12%</p>
             </div>
             <div className="p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Investors</p>
-              <p className="text-2xl font-bold">12</p>
+              <p className="text-2xl font-bold">{totalInvestor}</p>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <input
-              type="text"
-              placeholder="Enter amount investment"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="px-8 py-3 bg-[#6C63FF] text-white font-semibold rounded-lg hover:bg-[#5850EC] transition-colors whitespace-nowrap">
-              Invest
-            </button>
-          </div>
+          <InvestCard ideaId={BigInt(ideaId)} remainingFund={remainingFund}></InvestCard>
         </div>
 
-        {/* Right Column - Title Section */}
         <div className="w-full lg:w-1/2">
           <div className="sticky top-6">
-            <h1 className="text-3xl font-bold mb-4">Idea Title</h1>
+            <h1 className="text-3xl font-bold mb-4">{String(idea.title)}</h1>
             <p className="text-gray-700 leading-relaxed">
-              General overview of the idea. They can showcase their unique and innovative ideas here to raise funds based on their target etc etc. General overview of the idea. They can showcase their unique and innovative ideas here to raise funds based on their target etc etc.
+              {idea.description}
             </p>
           </div>
         </div>

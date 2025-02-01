@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import backendActor from "../utils/backend";
 
-const Invest: React.FC<{ ideaId: bigint }> = ({ ideaId }) => {
+const InvestCard: React.FC<{ ideaId: bigint, remainingFund: number}> = ({ ideaId, remainingFund }) => {
   const [amount, setAmount] = useState<number>(0);
   const [message, setMessage] = useState("");
 
@@ -9,6 +9,11 @@ const Invest: React.FC<{ ideaId: bigint }> = ({ ideaId }) => {
     if (amount <= 0) {
       setMessage("Investment amount must be greater than zero.");
       return;
+    }
+    if (amount > remainingFund) {
+        setMessage("Investment amount must be less than remaining fund.");
+        console.log("Investment amount must be less than remaining fund")
+        return;
     }
 
     try {
@@ -25,18 +30,18 @@ const Invest: React.FC<{ ideaId: bigint }> = ({ ideaId }) => {
   };
 
   return (
-    <div>
-      <h3>Invest in Business</h3>
-      <input 
-        type="number" 
-        placeholder="Amount (ICP)" 
-        value={amount} 
-        onChange={(e) => setAmount(Number(e.target.value))} 
-      />
-      <button onClick={invest}>Invest</button>
-      {message && <p>{message}</p>}
+    <div className="flex flex-col sm:flex-row gap-4">
+        <input
+            type="text"
+            placeholder="Enter amount investment"
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => setAmount(Number(e.target.value))} 
+        />
+        <button onClick={invest} className="px-8 py-3 bg-[#6C63FF] text-white font-semibold rounded-lg hover:bg-[#5850EC] transition-colors whitespace-nowrap">
+            Invest
+        </button>
     </div>
   );
 };
 
-export default Invest;
+export default InvestCard;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import backendActor from "../utils/backend";
-import Invest from "../components/InvestIdeaCard";
+import InvestCard from "../components/InvestIdeaCard";
 
 const InvestIdea: React.FC = () => {
     const { id }  = useParams();
@@ -29,7 +29,7 @@ const InvestIdea: React.FC = () => {
                 <p className="text-lg mt-5">{idea.description}</p>
                 <p className="text-lg mt-5">Funding Goal: {idea.fundingGoal} ICP</p>
                 <p className="text-lg mt-5">Current Funding: {idea.currentFunding} ICP</p>
-                <Invest ideaId={BigInt(ideaId)}></Invest>
+                <InvestCard ideaId={BigInt(ideaId)}></InvestCard>
             </div>
         </div>
     )
