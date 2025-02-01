@@ -1,5 +1,40 @@
+import ProgressBar from "../components/ProgressBar";
+import IdeaCard from "../components/IdeaCard";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
+
 function Profile() {
+    const ideas = [
+        {
+            id: 1n,
+            title: "AI-Powered Healthcare",
+            owner: "John Doe",
+            description: "A revolutionary AI-driven solution to enhance medical diagnosis.",
+            fundingGoal: 500n,
+            raisedAmount: 250n, 
+        },
+        {
+            id: 2n,
+            title: "Eco-Friendly Smart Home",
+            owner: "Jane Smith",
+            description: "An AI-driven smart home system that reduces energy consumption.",
+            fundingGoal: 300n,
+            raisedAmount: 150n, 
+        },
+        {
+            id: 3n,
+            title: "Eco-Friendly Smart Home",
+            owner: "Jane Smith",
+            description: "An AI-driven smart home system that reduces energy consumption.",
+            fundingGoal: 300n,
+            raisedAmount: 150n, 
+        }
+    ];
     return (
+        
         <div className="flex flex-col md:flex-row gap-8 p-6 bg-gray-100 min-h-screen">
             {/* Left Section */}
             <div className="w-full md:w-1/3 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
@@ -18,15 +53,7 @@ function Profile() {
                 </h4>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-gray-200 h-4 rounded-full mb-4 relative">
-                    <div
-                    className="absolute top-0 left-0 h-4 rounded-full bg-blue-600"
-                    style={{ width: "69%" }}
-                    ></div>
-                </div>
-                <div className="flex justify-between items-center text-sm font-semibold mb-4">
-                    <span className="text-gray-700">69% funded</span>
-                </div>
+                <ProgressBar progress={75} />
 
                 {/* Indicators */}
                 <div className="flex justify-around text-center text-sm font-semibold text-gray-800">
@@ -46,52 +73,52 @@ function Profile() {
                 </div>
 
                 {/* Investment Section */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border rounded-xl p-4">
-                    <img
-                    src="../assets/business.svg"
-                    alt="Idea"
-                    className="w-full rounded-lg mb-4"
-                    />
-                    <h4 className="font-semibold text-lg">Idea Title</h4>
-                    <p className="text-sm text-gray-500">
-                    General overview of the idea. They can showcase their unique and
-                    innovative ideas here to raise funds based on their target etc.
-                    </p>
-                    <div className="flex">
-                        <div>
-                            <p className="text-sm font-semibold mt-4">Your investment</p>
-                            <p className="text-lg font-bold">$123K</p>
-                        </div>
-                        <button className="ml-auto mt-4 bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 text-right">
-                        View More
+
+                <div className="p-6">
+                    <h1 className="text-2xl font-bold text-center mb-6">Business Ideas</h1>
+                    <div className="relative w-full">
+                        {/* Tombol Navigasi Kiri */}
+                        <button className="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 p-2  text-white rounded-full shadow-lg">
+                            ◀
+                        </button>
+
+                        {/* Swiper Container */}
+                        <Swiper
+                            slidesPerView={1}
+                            spaceBetween={20}
+                            navigation={{
+                                nextEl: ".swiper-button-next",
+                                prevEl: ".swiper-button-prev",
+                            }}
+                            pagination={{ clickable: true }}
+                            breakpoints={{
+                                640: { slidesPerView: 2 },
+                                1024: { slidesPerView: 2 },
+                            }}
+                            modules={[Navigation, Pagination]}
+                            className="w-full"
+                        >
+                            {ideas.map((idea) => (
+                                <SwiperSlide key={Number(idea.id)}>
+                                    <IdeaCard 
+                                        id={idea.id}
+                                        title={idea.title}
+                                        owner={idea.owner}
+                                        description={idea.description}
+                                        fundingGoal={idea.fundingGoal}
+                                        raisedAmount={(idea.raisedAmount * 100n) / idea.fundingGoal}
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+
+                        {/* Tombol Navigasi Kanan */}
+                        <button className="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-2  text-white rounded-full shadow-lg">
+                            ▶
                         </button>
                     </div>
-            
                 </div>
 
-                <div className="border rounded-xl p-4">
-                    <img
-                    src="../assets/business.svg"
-                    alt="Idea"
-                    className="w-full rounded-lg mb-4"
-                    />
-                    <h4 className="font-semibold text-lg">Idea Title</h4>
-                    <p className="text-sm text-gray-500">
-                    General overview of the idea. They can showcase their unique and
-                    innovative ideas here to raise funds based on their target etc.
-                    </p>
-                    <div className="flex">
-                        <div>
-                            <p className="text-sm font-semibold mt-4">Your investment</p>
-                            <p className="text-lg font-bold">$123K</p>
-                        </div>
-                        <button className="ml-auto mt-4 bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 text-right">
-                        View More
-                        </button>
-                    </div>
-                </div>
-                </div>
             </div>
             </div>
     );
