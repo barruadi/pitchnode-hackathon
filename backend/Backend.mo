@@ -52,6 +52,7 @@ actor PitchNode {
   stable var investments: List.List<Investment> = List.nil();
   stable var nextId: Nat = 0;
 
+  // Business
   public shared(ic) func uploadIdea(title: Text, description: Text, fundingGoal: Nat): async Nat {
       let caller = ic.caller;
       let idea: Businessidea = {
@@ -105,34 +106,56 @@ actor PitchNode {
         return false;
     };
 
+    public query func getRemainingAmount(ideaId: Nat): async Nat {
+      for (idea in List.toIter<Businessidea>(ideas)) {
+        if (idea.id == ideaId) {
+          return Nat.sub(idea.fundingGoal, idea.raisedAmount);
+        };
+      };
+      return 0;
+    };
+
+    public shared(ic) func getIdeaDetail(ideaId: Nat): async Businessidea {
+      for (idea in List.toIter<Businessidea>(ideas)) {
+        if (idea.id == ideaId) {
+          return idea;
+        };
+      };
+
+      let default = {
+        id = 0;
+        owner = ic.caller;
+        title = "NaN";
+        description = "NaN";
+        fundingGoal = 0;
+        raisedAmount = 0;
+      };
+      return default;
+    };
+
     public query func getIdeas(): async [Businessidea] {
         return List.toArray(ideas);
     };
 
-    public query func getIdeasList(): async List.List<Businessidea>  {
-        return ideas;
+    public query func getInvestmentsByIdea(ideaId: Nat): async [Investment] {
+        return List.toArray(List.filter<Investment>(investments, func (inv: Investment) : Bool { return inv.ideaId == ideaId }));
     };
 
-    // public query func getInvesmentByIdea(ideaId: Nat): async [Investment] {
-    //     return List.toArray(List.filter(investments, func(inv) {
-    //         inv.ideaId == ideaId
-    //     }));
-    // };
 
-    // public query func getInvesmentByInvestor(investor: Principal): async [Investment] {
-    //     return List.toArray(List.filter(investments, func(inv) {
-    //         inv.investor == investor
-    //     }));
-    // };
+    // Get all investments made by a specific investor
+    public query func getInvestmentsByInvestor(investor: Principal): async [Investment] {
+        return List.toArray(List.filter<Investment>(investments, func (inv: Investment): Bool { inv.investor == investor }));
+    };
 
+
+    // Invesment
+    public query func getTotalInvestor( ideaId: Nat ): async Nat {
+      var totalInvestor: Nat = 0;
+      for (investment in List.toIter<Investment>(investments)) {
+        if (investment.ideaId == ideaId) {
+          totalInvestor := Nat.add(totalInvestor, 1);
+        };
+      };
+      return totalInvestor;
+    };
 }
-
-// actor UserManager {
-
-// };
-
-
-// // investment
-// actor InvesmentPlatform {
-
-// };
