@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { canisterId, createActor } from '../declarations/backend';
 import { AuthClient } from '@dfinity/auth-client';
+import backendActor from '../utils/backend';
 
 const Register: React.FC = () => {
     const [role, setRole] = useState<"Investor" | "Business">("Investor");
@@ -9,13 +10,8 @@ const Register: React.FC = () => {
         const authClient = await AuthClient.create();
         const identity = authClient.getIdentity();
 
-        const backend = createActor(canisterId, {
-            agentOptions: {
-                identity,
-            },
-        });
         
-        const success = await backend.registerUser(role);
+        const success = await backendActor.registerUser(role);
 
         if (success) {
             console.log('User registered successfully');

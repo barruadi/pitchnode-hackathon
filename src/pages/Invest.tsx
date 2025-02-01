@@ -1,8 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IdeaCard from "../components/IdeaCard";
 import Navbar from "../components/NavBar";
-export default function ExploreIdeas() {
+import { canisterId, createActor } from "../declarations/backend";
+import backendActor from "../utils/backend";
+import { Principal } from "@dfinity/principal";
+
+interface BusinessIdea {
+    id: bigint;
+    title: string;
+    owner: string;
+    description: string;
+    fundingGoal: bigint;
+    raisedAmount: bigint;
+}
+
+const ExploreIdeas: React.FC  = () => {
+    // dummy data
     const ideas = [
         { title: "Idea Title #1", funded: 69, amount: 123, range: "3-12%", investors: 12 },
         { title: "Idea Title #2", funded: 69, amount: 290, range: "7-9%", investors: 23 },
@@ -12,15 +26,33 @@ export default function ExploreIdeas() {
         { title: "Idea Title #5", funded: 55, amount: 180, range: "2-8%", investors: 9 },
     ];
 
+    // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
-
     const totalPages = Math.ceil(ideas.length / itemsPerPage);
+    
+    
+    // fetch backend data
+    const [idea, setIdea] = useState<BusinessIdea[]>([]);
 
-    const currentIdeas = ideas.slice(
+    useEffect(() => {
+        const fetchIdeas = async () => {
+            const ideaList = await backendActor.getIdeas();
+            
+            const formattedIdeas = ideaList.map((idea: any) => ({
+                ...idea,
+                owner: Principal.from(idea.owner).toText(), // Convert Principal to string
+            }));
+            setIdea(formattedIdeas);
+        };
+        fetchIdeas();
+
+    }, []);
+
+    const currentIdeas = idea.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
-    );
+    )
 
     return (
         <div className="flex flex-col  ">
@@ -34,9 +66,14 @@ export default function ExploreIdeas() {
             <section id="invest">
             <h1 className="flex justify-start bg-gradient-to-r text-[37px] from-[#4E1C6B] to-[#324286] mx-10 font-bold mt-10 text-transparent bg-clip-text">Explore The Most Popular Ideas</h1>
             <div className="flex justify-center gap-8 mt-10 px-2">
-                {currentIdeas.map((idea, index) => (
+                {
+                    currentIdeas.map((idea, index) => (
+                        <IdeaCard key={index} {...idea} />
+                    ))
+                }
+                {/* {currentIdeas.map((idea, index) => (
                     <IdeaCard key={index} {...idea} />
-                ))}
+                ))} */}
             </div>
             
             
@@ -61,3 +98,5 @@ export default function ExploreIdeas() {
         </div>
     );
 }
+
+export default ExploreIdeas;

@@ -5,7 +5,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Invest from './pages/Invest';
-
+import Idea from './pages/Idea';
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/invest" element={<Invest />} />
+        <Route path="/idea" element={<Idea />} />
       </Routes>
     </Router>
   );
