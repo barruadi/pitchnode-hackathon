@@ -105,6 +105,15 @@ actor PitchNode {
         return false;
     };
 
+    public query func getIdeaDetail( ideaId: Nat ): async ?Businessidea {
+      for (idea in List.toIter<Businessidea>(ideas)) {
+        if (idea.id == ideaId) {
+          return ?idea;
+        };
+      };
+      return null;
+    };
+
     public query func getIdeas(): async [Businessidea] {
         return List.toArray(ideas);
     };
@@ -113,17 +122,15 @@ actor PitchNode {
         return ideas;
     };
 
-    // public query func getInvesmentByIdea(ideaId: Nat): async [Investment] {
-    //     return List.toArray(List.filter(investments, func(inv) {
-    //         inv.ideaId == ideaId
-    //     }));
-    // };
+    public query func getInvestmentsByIdea(ideaId: Nat): async [Investment] {
+        return List.toArray(List.filter<Investment>(investments, func (inv: Investment) : Bool { return inv.ideaId == ideaId }));
+    };
 
-    // public query func getInvesmentByInvestor(investor: Principal): async [Investment] {
-    //     return List.toArray(List.filter(investments, func(inv) {
-    //         inv.investor == investor
-    //     }));
-    // };
+
+    // Get all investments made by a specific investor
+    public query func getInvestmentsByInvestor(investor: Principal): async [Investment] {
+        return List.toArray(List.filter<Investment>(investments, func test (inv: Investment): Bool { inv.investor == investor }));
+    };
 
 }
 
