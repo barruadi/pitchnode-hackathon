@@ -5,14 +5,7 @@ import Navbar from "../components/NavBar";
 import backendActor from "../utils/backend";
 import { Principal } from "@dfinity/principal";
 
-interface BusinessIdea {
-    id: bigint;
-    title: string;
-    owner: string;
-    description: string;
-    fundingGoal: bigint;
-    raisedAmount: bigint;
-}
+import { BusinessIdea } from "../utils/types";
 
 const ExploreIdeas: React.FC  = () => {
     
@@ -60,7 +53,6 @@ const ExploreIdeas: React.FC  = () => {
                     ))
                 }
             </div>
-            
             
             <div className="flex justify-center mt-8 gap-4 py-4">
                 <button

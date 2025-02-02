@@ -35,6 +35,9 @@ export default defineConfig({
     environment('all', { prefix: 'DFX_' }),
   ],
   cacheDir: '../node_modules/.vite',
+  define: {
+    'process.env': process.env,
+  },
   test: {
     environment: 'jsdom',
     setupFiles: 'setupTests.ts',

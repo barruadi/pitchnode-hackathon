@@ -5,13 +5,13 @@ import backendActor from '../utils/backend';
 
 const Register: React.FC = () => {
     const [role, setRole] = useState<"Investor" | "Business">("Investor");
+    const [username, setUsername] = useState<string>("Unknown");
 
     const registerUser = async () => {
         const authClient = await AuthClient.create();
         const identity = authClient.getIdentity();
-
         
-        const success = await backendActor.registerUser(role);
+        const success = await backendActor.registerUser(role, username);
 
         if (success) {
             console.log('User registered successfully');
@@ -37,6 +37,13 @@ const Register: React.FC = () => {
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
                         Register Role
                         </h1>
+                        <input 
+                            type="text" 
+                            value={username} 
+                            onChange={(e) => setUsername(e.target.value)} 
+                            placeholder="Enter your username" 
+                            className="w-full bg-[#1E0A29] text-white p-2 rounded-lg mb-4"
+                        />
                         <select value={role} onChange={(e) => setRole(e.target.value as "Investor" | "Business")} className="w-full bg-[#1E0A29] text-white p-2 rounded-lg">
                             <option value="Investor">Investor</option>
                             <option value="Business">Business</option>

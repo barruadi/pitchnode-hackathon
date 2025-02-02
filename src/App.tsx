@@ -9,10 +9,11 @@ import Invest from './pages/Invest';
 import Idea from './pages/Idea';
 import InvestIdea from './pages/InvestIdea';
 import Detail from './pages/Detail';
+import UpdateBusiness from './pages/UpdateBusiness';
 
 const activeChainId = ChainId.Mumbai;
 
-const THIRDWEB_CLIENT_ID = import.meta.env.THIRDWEB_CLIENT_ID;
+const THIRDWEB_CLIENT_ID = import.meta.env.VITE_THIRDWEB_CLIENT_ID;
 
 function App() {
   return (
@@ -27,7 +28,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/invest" element={<Invest />} />
-          <Route path="/idea" element={<Idea />} />
+          <Route path="/upload-idea" element={<Idea />} />
+          <Route path="/update-business" element={<UpdateBusiness />} />
           <Route path="/detail/:id" element={<Detail />} />
         </Routes>
       </Router>

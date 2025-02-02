@@ -3,25 +3,25 @@ import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 
 actor PitchNode {
-  stable var users : List.List<(Principal, role: Text)> = List.nil();
+  stable var users : List.List<(Principal, role: Text, username: Text)> = List.nil();
 
-  public shared(ic) func registerUser(role: Text): async Bool {
+  public shared(ic) func registerUser(role: Text, username: Text): async Bool {
     let caller = ic.caller;
 
-    for (user in List.toIter<(Principal, role: Text)>(users)) {
+    for (user in List.toIter<(Principal, role: Text, username: Text)>(users)) {
       if (user.0 == caller) {
         return false;
       };
     };
 
-    users := List.push<(Principal, role: Text)>((caller, role), users);
+    users := List.push<(Principal, role: Text, username: Text)>((caller, role, username), users);
     return true;
   };
 
   public shared(ic) func getUser(): async ?Text {
     let caller = ic.caller;
 
-    for (user in List.toIter<(Principal, role: Text)>(users)) {
+    for (user in List.toIter<(Principal, role: Text, username: Text)>(users)) {
       if (user.0 == caller) {
         return ?user.1;
       };
@@ -31,12 +31,35 @@ actor PitchNode {
   };
 
 
+  public shared(ic) func getUsername(): async Text {
+    let caller = ic.caller;
+
+    for (user in List.toIter<(Principal, role: Text, username: Text)>(users)) {
+      if (user.0 == caller) {
+        return user.2;
+      };
+    };
+
+    return "NaN";
+  };
+
+  public query func getUsernameByPrincipal(principal: Principal): async ?Text {
+    for (user in List.toIter<(Principal, role: Text, username: Text)>(users)) {
+      if (user.0 == principal) {
+        return ?user.2;
+      };
+    };
+
+    return null;
+  };
+
     // Business idea structure
   public type Businessidea = {
       id: Nat;
       owner: Principal;
       title: Text;
       description: Text;
+      equity: Nat;
       fundingGoal: Nat;
       raisedAmount: Nat;
       imageUrl: Text;
@@ -54,13 +77,14 @@ actor PitchNode {
   stable var nextId: Nat = 0;
 
   // Business
-  public shared(ic) func uploadIdea(title: Text, description: Text, fundingGoal: Nat, imageUrl: Text): async Nat {
+  public shared(ic) func uploadIdea(title: Text, description: Text, equity: Nat, fundingGoal: Nat, imageUrl: Text): async Nat {
       let caller = ic.caller;
       let idea: Businessidea = {
           id = nextId;
           owner = caller;
           title = title;
           description = description;
+          equity = equity;
           fundingGoal = fundingGoal;
           raisedAmount = 0;
           imageUrl = imageUrl;
@@ -69,6 +93,16 @@ actor PitchNode {
       nextId := Nat.add(nextId, 1);
       
       return idea.id
+  };
+
+  public shared(ic) func haveBusinessIdea(): async Bool {
+    let caller = ic.caller;
+    for (idea in List.toIter<Businessidea>(ideas)) {
+      if (idea.owner == caller) {
+        return true;
+      };
+    };
+    return false;
   };
 
     // invest
@@ -85,6 +119,7 @@ actor PitchNode {
                     owner = idea.owner;
                     title = idea.title;
                     description = idea.description;
+                    equity = idea.equity;
                     fundingGoal = idea.fundingGoal;
                     raisedAmount = Nat.add(idea.raisedAmount, amount);
                     imageUrl = idea.imageUrl;
@@ -130,6 +165,7 @@ actor PitchNode {
         owner = ic.caller;
         title = "NaN";
         description = "NaN";
+        equity = 0;
         fundingGoal = 1;
         raisedAmount = 0;
         imageUrl = "NaN";
@@ -178,4 +214,14 @@ actor PitchNode {
       };
       return totalInvestor;
     };
+
+
+    // utils
+    public func clearData(): async Bool {
+      users := List.nil();
+      ideas := List.nil();
+      investments := List.nil();
+      nextId := 0;
+      return true;
+    }
 }

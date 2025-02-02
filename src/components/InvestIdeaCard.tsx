@@ -6,6 +6,7 @@ const InvestCard: React.FC<{ ideaId: bigint, remainingFund: number}> = ({ ideaId
   const [message, setMessage] = useState("");
 
   const invest = async () => {
+    // form validation
     if (amount <= 0) {
       setMessage("Investment amount must be greater than zero.");
       return;
@@ -16,10 +17,17 @@ const InvestCard: React.FC<{ ideaId: bigint, remainingFund: number}> = ({ ideaId
         return;
     }
 
+    // checking role
+    const role = await backendActor.getUser();
+    if (role[0] !== "Investor") {
+      setMessage("You are not an investor.");
+      return;
+    }
+
     try {
       const success = await backendActor.invest(ideaId, BigInt(amount));
       if (success) {
-        setMessage(`Investment successful! You invested ${amount} ICP.`);
+        setMessage(`Investment successful! You invested ${amount}.`);
       } else {
         setMessage("Investment failed.");
       }

@@ -7,7 +7,7 @@ import { Principal } from "@dfinity/principal";
 
 import { BusinessIdea } from "../utils/types";
 
-const Detail: React.FC = () => {
+const UpdateBusiness: React.FC = () => {
   const { id }  = useParams();
     const ideaId = Number(id);
 
@@ -88,7 +88,8 @@ const Detail: React.FC = () => {
             </div>
           </div>
 
-          <InvestCard ideaId={BigInt(ideaId)} remainingFund={remainingFund}></InvestCard>
+            {/* TODO: update to updating the value of the business */}
+          {/* <InvestCard ideaId={BigInt(ideaId)} remainingFund={remainingFund}></InvestCard> */}
         </div>
 
         <div className="w-full lg:w-1/2">
@@ -104,4 +105,4 @@ const Detail: React.FC = () => {
   );
 }
 
-export default Detail;
+export default UpdateBusiness;

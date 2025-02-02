@@ -32,15 +32,37 @@ const Idea: React.FC = () => {
 
     const submitIdea = async () => {
         // form validation
-        if (!title || !description || !fundingGoal || !imageFile) {
+        if (!title || !description || !equity || !fundingGoal || !imageFile) {
             console.log("Please fill all fields");
+            return;
+        }
+        if (equity < 0 || equity > 100) {
+            console.log("Equity should be between 0 and 100");
+            return;
+        }
+        if (fundingGoal <= 0) {
+            console.log("Funding goal should be greater than 0");
+            return;
+        }
+        
+        // checking if user already have a business idea
+        const status = await backendActor.haveBusinessIdea();
+        if (status) {
+            console.log("You already have a business idea");
+            return;
+        }
+
+        // checking role
+        const role = await backendActor.getUser();
+        if (role[0] !== "Business") {
+            console.log("You are not a business");
             return;
         }
 
         try {
             const imageURL = await uploadToIPFS();
 
-            const ideaId = await backendActor.uploadIdea(title, description, BigInt(fundingGoal), imageURL);
+            const ideaId = await backendActor.uploadIdea(title, description, BigInt(equity), BigInt(fundingGoal), imageURL);
             console.log(`Idea uploaded with id: ${ideaId}`);
 
             // reset form

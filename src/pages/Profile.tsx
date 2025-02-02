@@ -8,6 +8,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import backendActor from "../utils/backend";
 import { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
+import Navbar from "../components/NavBar";
 
 // types
 import { Investment, BusinessIdea } from "../utils/types";
@@ -19,6 +20,8 @@ function Profile() {
     const [role, setRole] = useState< 0 | 1 >(0);  // TODO: state role type
     // 0: investor
     // 1: business
+
+    const [username, setUsername] = useState<string>("");
     
     const [totalInvestor, setTotalInvestor] = useState(0);
     const [idea, setIdea] = useState<BusinessIdea>({
@@ -26,6 +29,7 @@ function Profile() {
         title: "",
         owner: "",
         description: "",
+        equity: BigInt(0),
         fundingGoal: BigInt(0),
         raisedAmount: BigInt(0),
         imageUrl: "",
@@ -83,6 +87,9 @@ function Profile() {
     useEffect(() => {
         const fetchUserData = async () => {
             const userRole = await backendActor.getUser();
+            const usernameFetch = await backendActor.getUsername();
+            
+            setUsername(usernameFetch);
 
             // identify role
             if (userRole[0] == "Business") {
@@ -104,7 +111,7 @@ function Profile() {
             {/* Left Section */}
             <div className="w-full md:w-1/3 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
                 <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"></div>
-                <h2 className="text-lg font-semibold">Barru Adi Utomo</h2>
+                <h2 className="text-lg font-semibold">{username}</h2>
                 <p className="text-gray-500">description</p>
             </div>
 
@@ -115,7 +122,7 @@ function Profile() {
                     <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
                         <h3 className="text-lg font-semibold mb-2">Your Business</h3>
                         <h4 className="text-xl font-bold text-gray-700 mb-4">
-                            idea.title
+                            {idea.title}
                         </h4>
 
                         {/* Progress Bar */}
@@ -129,7 +136,7 @@ function Profile() {
                             </div>
                             <div>
                                 <p className="text-blue-600">Equity</p>
-                                <p>3-12%</p>
+                                <p>{Number(idea.equity)} %</p>
                             </div>
                             <div>
                                 <p className="text-blue-600">Investors</p>
@@ -163,14 +170,17 @@ function Profile() {
                             className="w-full"
                         >
                             {businessInvest.map((idea, index) => (
+                                // TODO: add index to prevent same key children
                                 <SwiperSlide key={Number(idea.id)}>
                                     <IdeaCard 
                                         id={idea.id}
                                         title={idea.title}
                                         owner={idea.owner}
                                         description={idea.description}
+                                        equity={idea.equity}
                                         fundingGoal={idea.fundingGoal}
                                         raisedAmount={(idea.raisedAmount * 100n) / idea.fundingGoal}
+                                        imageUrl={idea.imageUrl}
                                     />
                                 </SwiperSlide>
                             ))}

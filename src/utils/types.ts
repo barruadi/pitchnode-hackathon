@@ -3,6 +3,7 @@ export interface BusinessIdea {
     title: string;
     owner: string; // Principal
     description: string;
+    equity: bigint; // in percentage
     fundingGoal: bigint;
     raisedAmount: bigint;
     imageUrl: string; // image link
