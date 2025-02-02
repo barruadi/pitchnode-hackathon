@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import Navbar from "../components/NavBar";
-import { canisterId, createActor } from "../declarations/backend"
+import Navbar from "../components/NavBar"
 import backendActor  from "../utils/backend"
+import { useStorageUpload } from "@thirdweb-dev/react"
 
 const Idea: React.FC = () => {
     const [title, setTitle] = useState<string>("");
@@ -10,14 +10,46 @@ const Idea: React.FC = () => {
     const [equity, setEquity] = useState<number>(0);
     const [imageFile, setImageFile] = useState<File | null>(null);
 
-    const submitIdea = async () => {
+    const { mutateAsync: upload } = useStorageUpload();
+
+    const uploadToIPFS = async () => {
         try {
-            const ideaId = await backendActor.uploadIdea(title, description, BigInt(fundingGoal));
+            const uploadUrl = await upload({
+                data: [imageFile],
+                options: {
+                    uploadWithGatewayUrl: true,
+                    uploadWithoutDirectory: true
+                }
+            });
+            console.log('url:', uploadUrl);
+            return uploadUrl[0];
+
+        } catch (error) {
+            console.error(error);
+            return "";
+        }
+    }
+
+    const submitIdea = async () => {
+        // form validation
+        if (!title || !description || !fundingGoal || !imageFile) {
+            console.log("Please fill all fields");
+            return;
+        }
+
+        try {
+            const imageURL = await uploadToIPFS();
+
+            const ideaId = await backendActor.uploadIdea(title, description, BigInt(fundingGoal), imageURL);
             console.log(`Idea uploaded with id: ${ideaId}`);
+
+            // reset form
             setTitle("");
             setFundingGoal(0);
             setEquity(0);
             setDescription("");
+            setImageFile(null);
+
         } catch (error) {
             console.error(error);
         }

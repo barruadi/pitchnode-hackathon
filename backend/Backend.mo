@@ -39,6 +39,7 @@ actor PitchNode {
       description: Text;
       fundingGoal: Nat;
       raisedAmount: Nat;
+      imageUrl: Text;
   };
 
     // Investment structure
@@ -53,7 +54,7 @@ actor PitchNode {
   stable var nextId: Nat = 0;
 
   // Business
-  public shared(ic) func uploadIdea(title: Text, description: Text, fundingGoal: Nat): async Nat {
+  public shared(ic) func uploadIdea(title: Text, description: Text, fundingGoal: Nat, imageUrl: Text): async Nat {
       let caller = ic.caller;
       let idea: Businessidea = {
           id = nextId;
@@ -62,6 +63,7 @@ actor PitchNode {
           description = description;
           fundingGoal = fundingGoal;
           raisedAmount = 0;
+          imageUrl = imageUrl;
       };
       ideas := List.push<Businessidea>(idea, ideas);
       nextId := Nat.add(nextId, 1);
@@ -85,6 +87,7 @@ actor PitchNode {
                     description = idea.description;
                     fundingGoal = idea.fundingGoal;
                     raisedAmount = Nat.add(idea.raisedAmount, amount);
+                    imageUrl = idea.imageUrl;
                 };
                 updatedIdeas := List.push<Businessidea>(newIdea, updatedIdeas);
                 found := true;
@@ -127,8 +130,9 @@ actor PitchNode {
         owner = ic.caller;
         title = "NaN";
         description = "NaN";
-        fundingGoal = 0;
+        fundingGoal = 1;
         raisedAmount = 0;
+        imageUrl = "NaN";
       };
       return default;
     };
@@ -141,10 +145,26 @@ actor PitchNode {
         return List.toArray(List.filter<Investment>(investments, func (inv: Investment) : Bool { return inv.ideaId == ideaId }));
     };
 
+    // principal -> ideaId
+    public shared(ic) func getIdeaIdByPrincipal(): async Nat {
+      let principal = ic.caller;
+      for (idea in List.toIter<Businessidea>(ideas)) {
+        if (idea.owner == principal) {
+          return idea.id;
+        };
+      };
+      return 0;
+    };
 
-    // Get all investments made by a specific investor
+    // principal -> investment
     public query func getInvestmentsByInvestor(investor: Principal): async [Investment] {
         return List.toArray(List.filter<Investment>(investments, func (inv: Investment): Bool { inv.investor == investor }));
+    };
+
+    // user -> investment
+    public shared(ic) func getInvesmentUser(): async [Investment] {
+        let principal = ic.caller;
+        return List.toArray(List.filter<Investment>(investments, func (inv: Investment): Bool { inv.investor == principal }));
     };
 
 

@@ -29,7 +29,7 @@ const InvestIdea: React.FC = () => {
                 <p className="text-lg mt-5">{idea.description}</p>
                 <p className="text-lg mt-5">Funding Goal: {idea.fundingGoal} ICP</p>
                 <p className="text-lg mt-5">Current Funding: {idea.currentFunding} ICP</p>
-                <InvestCard ideaId={BigInt(ideaId)}></InvestCard>
+                {/* <InvestCard ideaId={BigInt(ideaId)}></InvestCard> */}
             </div>
         </div>
     )

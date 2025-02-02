@@ -12,6 +12,7 @@ interface BusinessIdea {
   description: string;
   fundingGoal: bigint;
   raisedAmount: bigint;
+  imageUrl: string;
 }
 
 const Detail: React.FC = () => {
@@ -25,6 +26,7 @@ const Detail: React.FC = () => {
       description: "",
       fundingGoal: BigInt(0),
       raisedAmount: BigInt(0),
+      imageUrl: "",
     });
 
     const [totalInvestor, setTotalInvestor] = useState(0);
@@ -68,7 +70,7 @@ const Detail: React.FC = () => {
           
           <div className="w-full aspect-video mb-6">
             <img 
-              src="../assets/invest.png" 
+              src={idea.imageUrl} 
               alt="Investment Preview" 
               className="w-full h-full object-cover rounded-lg"
             />
