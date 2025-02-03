@@ -10,8 +10,8 @@ export interface BusinessIdea {
     investorShares: [string, number][]; // Principal, shares
 }
 
-// export interface Investment {
-//     investor: string; // Principal
-//     ideaId: bigint;
-//     amount: bigint;
-// }
+export interface Investment {
+    investor: string; // Principal
+    ideaId: bigint;
+    shares: bigint;
+}

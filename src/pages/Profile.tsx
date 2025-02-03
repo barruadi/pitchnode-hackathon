@@ -13,7 +13,6 @@ import Navbar from "../components/NavBar";
 // types
 import { Investment, BusinessIdea } from "../utils/types";
 
-
 function Profile() {
 
     // TODO: able to switch role for debugging

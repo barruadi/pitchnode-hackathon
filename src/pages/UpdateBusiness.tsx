@@ -49,6 +49,10 @@ const UpdateBusiness: React.FC = () => {
               
               setTotalInvestor(Number(totalInvestor));
               setIdea(FormattedIdea);
+
+              // TODO: re-evalutate the valuation
+              backendActor.updateValuation(BigInt(ideaId), ideaFetch.valuation);
+
             } catch (error) {
                 console.error(error);
             }
@@ -90,7 +94,7 @@ const UpdateBusiness: React.FC = () => {
             </div>
           </div>
 
-            {/* TODO: update to updating the value of the business */}
+            {/* TODO: fix the update */}
           {/* <InvestCard ideaId={BigInt(ideaId)} remainingFund={remainingFund}></InvestCard> */}
         </div>
 
