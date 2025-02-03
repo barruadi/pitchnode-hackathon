@@ -250,7 +250,7 @@ actor PitchNode {
       return 0;
     };
 
-    // principal -> investment
+    // principal -> investment with ideaId
     public query func getInvestmentsByInvestor(investor: Principal): async [(Nat, Principal, Float)] {
       var result: [(Nat, Principal, Float)] = [];
       for (idea in List.toIter<Businessidea>(ideas)) {
@@ -316,6 +316,10 @@ actor PitchNode {
       users := List.nil();
       ideas := List.nil();
       nextId := 0;
+      return true;
+    };
+    public func resetUser(): async Bool {
+      users := List.nil();
       return true;
     }
 }

@@ -33,17 +33,13 @@ function Home() {
                     <div className="font-bold text-5xl bg-gradient-to-r from-[#8B9BE2] to-white bg-clip-text text-transparent pb-5">
                         For innovators
                     </div>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Transform your groundbreaking ideas into reality through our blockchain-powered platform. Get exclusive NFT ownership of your business concept, connect with potential investors, and leverage AI-powered tools to create compelling pitch decks. With premium features and boost options, your innovative vision gets the exposure it deserves.
                 </div>
                 <div className="pt-15">
                     <div className="font-bold text-5xl bg-gradient-to-r from-[#8B9BE2] to-white bg-clip-text text-transparent pb-5">
                         For investors
                     </div>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Discover and invest in promising ventures through our secure Web3 platform. Gain NFT-backed ownership in emerging businesses, participate in profit-sharing opportunities, and build a diverse portfolio of innovative investments. Our verified user system and transparent blockchain technology ensure your investments are protected.
                 </div>
             </div>
             <div className="flex-col w-full items-center">
