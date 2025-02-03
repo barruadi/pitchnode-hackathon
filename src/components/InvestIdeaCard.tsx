@@ -25,7 +25,7 @@ const InvestCard: React.FC<{ ideaId: bigint, remainingFund: number}> = ({ ideaId
     }
 
     try {
-      const success = await backendActor.invest(ideaId, BigInt(amount));
+      const success = await backendActor.invest(ideaId, Number(amount));
       if (success) {
         setMessage(`Investment successful! You invested ${amount}.`);
       } else {

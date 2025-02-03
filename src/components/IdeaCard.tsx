@@ -1,7 +1,7 @@
 import { BusinessIdea } from "../utils/types";
 import ProgressBar from "./ProgressBar";
 
-export default function IdeaCard({ id, title, description, equity, raisedAmount, fundingGoal, imageUrl}: BusinessIdea) {
+export default function IdeaCard({ id, title, description, equity, raisedAmount, valuation, imageUrl, investorShares}: BusinessIdea) {
     return (
         <div className="border-2 border-gray-200 rounded-2xl shadow-lg w-[350px] mx-auto flex flex-col bg-white">
             <div className="max-h-[25vh] overflow-hidden">
@@ -16,14 +16,14 @@ export default function IdeaCard({ id, title, description, equity, raisedAmount,
 
             <div className="px-4">
                 <div className="relative w-full h-auto mt-2 rounded-full">
-                    <ProgressBar progress={Number(raisedAmount) / Number(fundingGoal) * 100}></ProgressBar>
+                    <ProgressBar progress={Number(raisedAmount) / Number(valuation) * 100}></ProgressBar>
                 </div>
             </div>
 
             <div className="flex justify-between px-4 mt-4 text-center text-sm text-black">
                 <div>
                     <p className="font-bold text-[#324286]">Funding Goal</p>
-                    <p className="text-lg font-semibold">{Number(fundingGoal)}</p>
+                    <p className="text-lg font-semibold">{Number(valuation)}</p>
                 </div>
                 <div>
                 <p className="font-bold text-[#324286]">Equity</p>

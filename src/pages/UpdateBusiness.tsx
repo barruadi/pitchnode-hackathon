@@ -16,10 +16,11 @@ const UpdateBusiness: React.FC = () => {
       title: "",
       owner: "",
       description: "",
-      equity: BigInt(0),
-      fundingGoal: BigInt(0),
-      raisedAmount: BigInt(0),
+      equity: Number(0),
+      valuation: Number(0),
+      raisedAmount: Number(0),
       imageUrl: "",
+      investorShares: [],
     });
 
     const [totalInvestor, setTotalInvestor] = useState(0);
@@ -31,18 +32,19 @@ const UpdateBusiness: React.FC = () => {
             try {
               const totalInvestor = await backendActor.getTotalInvestor(BigInt(ideaId));
               const ideaFetch = await backendActor.getIdeaDetail(BigInt(ideaId));
-              let remainingFunding = Number(ideaFetch.fundingGoal) - Number(ideaFetch.raisedAmount);
+              let remainingFunding = Number(ideaFetch.valuation) - Number(ideaFetch.raisedAmount);
                 if (remainingFunding < 0) {
                   remainingFunding = 0;
                 }
               setRemainingFund(remainingFunding);
               
-              const percentageBar = (Number(ideaFetch.raisedAmount) / Number(ideaFetch.fundingGoal)) * 100;
+              const percentageBar = (Number(ideaFetch.raisedAmount) / Number(ideaFetch.valuation)) * 100;
               setPercentage(percentageBar);
 
-              const FormattedIdea = {
+              const FormattedIdea: BusinessIdea = {
                 ...ideaFetch,
                 owner: Principal.from(ideaFetch.owner).toText(),
+                investorShares: ideaFetch.investorShares.map((investor: [Principal, number]) => [Principal.from(investor[0]).toText(), investor[1]]),
               }
               
               setTotalInvestor(Number(totalInvestor));
@@ -75,8 +77,8 @@ const UpdateBusiness: React.FC = () => {
 
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Funding Goals</p>
-              <p className="text-2xl font-bold">{Number(idea.fundingGoal)}</p>
+              <p className="text-sm text-gray-600 mb-1">Valuation</p>
+              <p className="text-2xl font-bold">{Number(idea.valuation)}</p>
             </div>
             <div className="p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Equity</p>

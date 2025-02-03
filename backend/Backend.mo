@@ -251,12 +251,12 @@ actor PitchNode {
     };
 
     // principal -> investment
-    public query func getInvestmentsByInvestor(investor: Principal): async [(Principal, Float)] {
-      var result: [(Principal, Float)] = [];
+    public query func getInvestmentsByInvestor(investor: Principal): async [(Nat, Principal, Float)] {
+      var result: [(Nat, Principal, Float)] = [];
       for (idea in List.toIter<Businessidea>(ideas)) {
         for (share in List.toIter<(Principal, Float)>(List.fromArray(idea.investorShares))) {
           if (share.0 == investor) {
-            result := List.toArray(List.push<(Principal, Float)>(share, List.fromArray(result)));
+            result := List.toArray(List.push<(Nat, Principal, Float)>((idea.id, share.0, share.1), List.fromArray(result)));
           };
         };
       };
@@ -268,13 +268,13 @@ actor PitchNode {
     // };
 
     // user -> investment
-    public shared(ic) func getInvestmentUesr(): async [(Principal, Float)] {
+    public shared(ic) func getInvestmentUser(): async [(Nat, Principal, Float)] {
       let principal = ic.caller;
-      var result: [(Principal, Float)] = [];
+      var result: [(Nat, Principal, Float)] = [];
       for (idea in List.toIter<Businessidea>(ideas)) {
         for (share in List.toIter<(Principal, Float)>(List.fromArray(idea.investorShares))) {
           if (share.0 == principal) {
-            result := List.toArray(List.push<(Principal, Float)>(share, List.fromArray(result)));
+            result := List.toArray(List.push<(Nat, Principal, Float)>((idea.id, share.0, share.1), List.fromArray(result)));
           };
         };
       };

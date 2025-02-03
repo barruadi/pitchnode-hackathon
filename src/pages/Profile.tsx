@@ -29,10 +29,11 @@ function Profile() {
         title: "",
         owner: "",
         description: "",
-        equity: BigInt(0),
-        fundingGoal: BigInt(0),
-        raisedAmount: BigInt(0),
+        equity: Number(0),
+        valuation: Number(0),
+        raisedAmount: Number(0),
         imageUrl: "",
+        investorShares: [],
     });
 
     const [investment, setInvestment] = useState<Investment[]>([])
@@ -43,9 +44,10 @@ function Profile() {
             const id = await backendActor.getIdeaIdByPrincipal();
             const ideaFetch = await backendActor.getIdeaDetail(id);
             const totalInvestor = await backendActor.getTotalInvestor(id);
-            const FormattedIdea = {
+            const FormattedIdea: BusinessIdea = {
                 ...ideaFetch,
                 owner: Principal.from(ideaFetch.owner).toText(),
+                investorShares: ideaFetch.investorShares.map((investor: [Principal, number]) => [Principal.from(investor[0]).toText(), investor[1]]),
             };
             setIdea(FormattedIdea);
             setTotalInvestor(Number(totalInvestor));
@@ -57,7 +59,7 @@ function Profile() {
 
     const fetchInvestmentList = async () => {
         try {
-            const fetchInvestment = await backendActor.getInvesmentUser();
+            const fetchInvestment = await backendActor.getInvestmentUser();
             const FormattedInvestment = fetchInvestment.map((inv: any) => ({
                 ...inv,
                 investor: Principal.from(inv.investor).toText(),
@@ -71,6 +73,7 @@ function Profile() {
                         return {
                             ...detail,
                             owner: Principal.from(detail.owner).toText(),
+                            investorShares: detail.investorShares.map((investor: [Principal, number]) => [Principal.from(investor[0]).toText(), investor[1]] as [string, number]),
                         };
                     }
                     return null;
@@ -126,13 +129,13 @@ function Profile() {
                         </h4>
 
                         {/* Progress Bar */}
-                        <ProgressBar progress={Number(idea.raisedAmount) / Number(idea.fundingGoal) * 100} />
+                        <ProgressBar progress={Number(idea.raisedAmount) / Number(idea.valuation) * 100} />
 
                         {/* Indicators */}
                         <div className="flex justify-around text-center text-sm font-semibold text-gray-800">
                             <div>
                                 <p className="text-blue-600">Funding Goals</p>
-                                <p>{Number(idea.fundingGoal)}</p>
+                                <p>{Number(idea.valuation)}</p>
                             </div>
                             <div>
                                 <p className="text-blue-600">Equity</p>
@@ -178,9 +181,10 @@ function Profile() {
                                         owner={idea.owner}
                                         description={idea.description}
                                         equity={idea.equity}
-                                        fundingGoal={idea.fundingGoal}
-                                        raisedAmount={(idea.raisedAmount * 100n) / idea.fundingGoal}
+                                        valuation={idea.valuation}
+                                        raisedAmount={(idea.raisedAmount * 100) / idea.valuation}
                                         imageUrl={idea.imageUrl}
+                                        investorShares={idea.investorShares}
                                     />
                                 </SwiperSlide>
                             ))}

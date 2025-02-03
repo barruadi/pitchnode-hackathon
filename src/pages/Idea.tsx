@@ -3,6 +3,8 @@ import Navbar from "../components/NavBar"
 import backendActor  from "../utils/backend"
 import { useStorageUpload } from "@thirdweb-dev/react"
 
+
+//TODO: rename fundingGoal to valuation
 const Idea: React.FC = () => {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -62,7 +64,7 @@ const Idea: React.FC = () => {
         try {
             const imageURL = await uploadToIPFS();
 
-            const ideaId = await backendActor.uploadIdea(title, description, BigInt(equity), BigInt(fundingGoal), imageURL);
+            const ideaId = await backendActor.uploadIdea(title, description, Number(equity), Number(fundingGoal), imageURL);
             console.log(`Idea uploaded with id: ${ideaId}`);
 
             // reset form
