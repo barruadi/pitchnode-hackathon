@@ -35,7 +35,7 @@ Backend: Motoko, Dfinity SDK, ICP Canisters, Internet Identity
 ## Member
 Institut Teknologi Bandung - Informatics
 
-Azfa Radhiyya Hakim 
+Azfa Radhiyya Hakim  
 Barru Adi Utomo  
 Najwa Kahani Fatima  
 Nayla Zahira  
