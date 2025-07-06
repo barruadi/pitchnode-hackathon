@@ -5,6 +5,7 @@ import Float "mo:base/Float";
 
 actor PitchNode {
   stable var users : List.List<(Principal, role: Text, username: Text)> = List.nil();
+  stable var valuationHistory: List.List<(ideaId: Nat, valuation: Float)> = List.nil<(ideaId: Nat, valuation: Float)>();
 
   public shared(ic) func registerUser(role: Text, username: Text): async Bool {
     let caller = ic.caller;
@@ -128,10 +129,23 @@ actor PitchNode {
 
     if (found) {
       ideas := updatedIdeas;
+      valuationHistory := List.push<(ideaId: Nat, valuation: Float)>((ideaId, newValuation), valuationHistory);
       return true;
     };
     return false;
   };
+
+    // fungsi untuk mengambil riwauyat valuation dari sebuah ide
+    // return : array
+    public query func getValuationHistoryFromIdea(ideaId: Nat): async [(Nat, Float)] {
+      var results: List.List<(Nat, Float)> = List.nil<(Nat, Float)>();
+      for (history in List.toIter(valuationHistory)){
+        if (history.0 == ideaId){
+          results := List.push<(Nat, Float)>((history.0, history.1), results);
+        };
+      };
+      return List.toArray(List.reverse(results));
+    };
 
     // invest
     public shared(ic) func invest(ideaId: Nat, amount: Float): async Bool {
