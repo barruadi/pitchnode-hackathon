@@ -6,9 +6,13 @@ import Chatroom "Chatroom";
 
 actor PitchNode {
 	stable var users : List.List<(Principal, role : Text, username : Text)> = List.nil();
-  stable var valuationHistory: List.List<(ideaId: Nat, valuation: Float)> = List.nil<(ideaId: Nat, valuation: Float)>();
+	stable var valuationHistory : List.List<(ideaId : Nat, valuation : Float)> = List.nil<(ideaId : Nat, valuation : Float)>();
+	stable var investHistory: List.List<(ideaId: Nat, investor: Principal, amount: Float)> = List.nil();
+	stable var ideas : List.List<Businessidea> = List.nil();
+	stable var nextId : Nat = 0;
 	stable var chatMessages : List.List<Chatroom.ChatMessage> = List.nil();
-	
+
+
 	public shared (ic) func registerUser(role : Text, username : Text) : async Bool {
 		let caller = ic.caller;
 
@@ -69,8 +73,7 @@ actor PitchNode {
 		investorShares : [(Principal, Float)];
 	};
 
-	stable var ideas : List.List<Businessidea> = List.nil();
-	stable var nextId : Nat = 0;
+
 
 	// Business
 	public shared (ic) func uploadIdea(title : Text, description : Text, equity : Float, valuation : Float, imageUrl : Text) : async Nat {
@@ -133,18 +136,18 @@ actor PitchNode {
 		};
 		return false;
 	};
-  
-  // fungsi untuk mengambil riwauyat valuation dari sebuah ide
-  // return : array
-  public query func getValuationHistoryFromIdea(ideaId: Nat): async [(Nat, Float)] {
-  var results: List.List<(Nat, Float)> = List.nil<(Nat, Float)>();
-  for (history in List.toIter(valuationHistory)){
-    if (history.0 == ideaId){
-      results := List.push<(Nat, Float)>((history.0, history.1), results);
-    };
-  };
-  return List.toArray(List.reverse(results));
-  };
+
+	// fungsi untuk mengambil riwauyat valuation dari sebuah ide
+	// return : array
+	public query func getValuationHistoryFromIdea(ideaId : Nat) : async [(Nat, Float)] {
+		var results : List.List<(Nat, Float)> = List.nil<(Nat, Float)>();
+		for (history in List.toIter(valuationHistory)) {
+			if (history.0 == ideaId) {
+				results := List.push<(Nat, Float)>((history.0, history.1), results);
+			};
+		};
+		return List.toArray(List.reverse(results));
+	};
 
 	// invest
 	public shared (ic) func invest(ideaId : Nat, amount : Float) : async Bool {
@@ -188,6 +191,7 @@ actor PitchNode {
 
 		if (found) {
 			ideas := updatedIdeas;
+			investHistory := List.push<(ideaId: Nat, investor: Principal, amount: Float)>((ideaId, caller, amount), investHistory);
 			return true;
 		};
 		return false;
@@ -293,6 +297,29 @@ actor PitchNode {
 				};
 			};
 		};
+		return result;
+	};
+
+	public shared (ic) func getInvestmentUpdateByUser() : async [(Nat, Principal, Float)] {
+		let principal = ic.caller;
+		var user_invest_id : [Nat] = [];
+		var result : [(Nat, Principal, Float)] = [];
+		for (idea in List.toIter<Businessidea>(ideas)) {
+			for (share in List.toIter<(Principal, Float)>(List.fromArray(idea.investorShares))) {
+				if (share.0 == principal) {
+					user_invest_id := List.toArray(List.push<(Nat)>((idea.id), List.fromArray(user_invest_id)));
+				};
+			};
+		};
+
+		for (idea in List.toIter<Nat>(List.fromArray(user_invest_id))) {
+			for (invest in List.toIter<(Nat, Principal, Float)>(investHistory)) {
+				if (invest.0 == idea and invest.1 == principal) {
+					result := List.toArray(List.push<(Nat, Principal, Float)>((invest.0, invest.1, invest.2), List.fromArray(result)));
+				};
+			};
+		};
+
 		return result;
 	};
 
