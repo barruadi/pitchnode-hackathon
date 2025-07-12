@@ -21,6 +21,10 @@ export default defineConfig({
     },
   },
   server: {
+    watch: {
+      usePolling: true,
+      interval: 300, // bisa disesuaikan, 300ms cukup aman
+    },
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:4943',
