@@ -10,6 +10,8 @@ import Idea from './pages/Idea';
 import InvestIdea from './pages/InvestIdea';
 import Detail from './pages/Detail';
 import UpdateBusiness from './pages/UpdateBusiness';
+import ProjectDetail from './pages/ProjectDetail';
+import UserDashboard from './pages/UserDashboard';
 
 const activeChainId = ChainId.Mumbai;
 
@@ -30,7 +32,8 @@ function App() {
           <Route path="/invest" element={<Invest />} />
           <Route path="/upload-idea" element={<Idea />} />
           <Route path="/update-business" element={<UpdateBusiness />} />
-          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/detail/:id" element={<ProjectDetail />} />
         </Routes>
       </Router>
     </ThirdwebProvider>
