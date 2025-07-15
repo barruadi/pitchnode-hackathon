@@ -29,35 +29,47 @@ const PROJECT_DETAILS = {
 
 
 const FINANCE_RECORD = [
-  { id: 1, tag: "income", text: "Added financial record for June 2025.", time: "1 day ago" },
+  { id: 1, tag: "revenue", text: "Added financial record for June 2025.", time: "1 day ago" },
   { id: 2, tag: "others", text: "Edit 4 entries in March 2025.", time: "3 days ago" },
+  { id: 3, tag: "others", text: "Edit 4 entries in March 2025.", time: "3 days ago" },
+  { id: 4, tag: "others", text: "Edit 4 entries in March 2025.", time: "3 days ago" },
+  { id: 5, tag: "others", text: "Edit 4 entries in March 2025.", time: "3 days ago" },
 ];
 
-const DiscussionDummy = [
+const DISCUSSION = [
   {
     id: 1,
-    user: "@username",
-    time: "2 days ago",
-    text: "What are the key features of this project?",
+    user: '@username',
+    time: '2 days ago',
+    text: 'What are the key features of this project?',
+    likes: 256,
+    dislikes: 13,
+    comments: 9,
+    replies: [],
   },
   {
     id: 2,
-    user: "@username",
-    time: "2 days ago",
-    text: "How is the business model of this project?",
-    reply:
-      "We're raising funds to scale our go‑to‑market & strengthen our AI core.",
+    user: '@username',
+    time: '2 days ago',
+    text: 'How is the business model of this project?',
+    likes: 256,
+    dislikes: 13,
+    comments: 2,
+    replies: [
+      {
+        id: '2-1',
+        user: '@founder',
+        time: '2 days ago',
+        text: "We're raising funds to scale our go-to-market & strengthen our AI core.",
+        likes: 12,
+        dislikes: 0,
+        comments: 0,
+      },
+    ],
   },
 ];
 
-function StatBox({ title, value }: { title: string; value: string | number }) {
-  return (
-    <div className="bg-white rounded-xl p-6 space-y-2 text-center shadow-sm">
-      <p className="text-sm text-gray-500">{title}</p>
-      <p className="text-2xl font-bold text-[#1E1E1E]">{value}</p>
-    </div>
-  );
-}
+
 
 function Modal({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null;
@@ -87,6 +99,33 @@ function Modal({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
+function PostItem({ item, isReply = false }) {
+  return (
+    <div className={`space-y-2 ${isReply ? 'mt-2' : ''}`}>
+      <p className="text-xs text-[#64748B]">
+        <span className="font-medium text-[#0F172A]">{item.user}</span> • {item.time}
+      </p>
+
+      <p className="text-[#0F172A]">{item.text}</p>
+
+      <div className="flex gap-6 text-xs">
+        <span className="flex items-center gap-1">
+          <img src="../assets/icon-like.png" alt="like" className="w-3 h-3" /> 
+          <span className="font-medium">{item.likes}</span>
+        </span>
+        <span className="flex items-center gap-1">
+          <img src="../assets/icon-dislike.png" alt="dislike" className="w-3 h-3" /> 
+          <span className="font-medium">{item.dislikes}</span>
+        </span>
+        <span className="flex items-center gap-1">
+          <img src="../assets/icon-comment.png" alt="comment" className="w-3 h-3" />
+          <span className="font-medium">{item.comments}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectDetail() {
   const [openModal, setOpenModal] = useState(false);
 
@@ -96,23 +135,22 @@ export default function ProjectDetail() {
       <main className="bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 min-h-screen py-4 px-6 md:px-10">
         <div className="mx-auto w-full max-w-7xl bg-white/50 rounded-2xl py-8 px-6">
           <div className="grid grid-cols-16 gap-6">
-            {/* ──── TOP ROW ───────────────────────────────────────── */}
-            {/* left 4/16  (thumbnail + highlights) */}
             <div className="col-span-4 space-y-4">
-              <div className="w-full h-40 bg-white rounded-md" />
+              <div className="w-full h-32 bg-white rounded-md" />
               <div className="bg-white/50 rounded-md p-4 text-sm">
                 <h4 className="font-semibold mb-2 text-[#324286]">Project Highlights</h4>
-                <ul className="list-disc list-inside space-y-1 text-[#64748B] text-xs">
+                <ul className="list-disc marker:mr-0.5 marker:text-[#64748B] list-inside space-y-0.5 text-[#64748B] text-[10px]">
                   {PROJECT_DETAILS.highlights.map((h) => (
-                    <li key={h}>{h}</li>
+                    <li key={h} className="flex items-start gap-1">
+                      <span className="mt-[1px] text-[10px] leading-none">•</span>
+                      <span>{h}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            {/* centre 6/16 (title, description, editable fields) */}
             <div className="col-span-6 space-y-4">
-              {/* title with inline edit */}
               <div className="inline-flex items-baseline gap-2">
                 <h1 className="text-4xl font-bold leading-tight">
                   {PROJECT_DETAILS.title}
@@ -124,50 +162,78 @@ export default function ProjectDetail() {
                 {PROJECT_DETAILS.description}
               </p>
 
-              {/* INLINE FIELDS grid */}
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <label className="space-y-1">
-                  <span className="text-[#324286]">Valuation</span>
-                  <input
-                    readOnly
-                    value={PROJECT_DETAILS.valuation}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </label>
-                <label className="space-y-1">
-                  <span className="text-[#324286]">Pitch Deck</span>
-                  <input
-                    readOnly
-                    value={PROJECT_DETAILS.pitchDeck}
-                    className="w-full border rounded px-2 py-1"
-                  />
-                </label>
+              <div className="grid grid-cols-3 gap-6 text-xs">
 
-                <label className="space-y-1">
-                  <span className="text-[#324286]">Start Target</span>
-                  <input readOnly value={PROJECT_DETAILS.startTarget} className="w-full border rounded px-2 py-1" />
-                </label>
-                <label className="space-y-1">
-                  <span className="text-[#324286]">End Target</span>
-                  <input readOnly value={PROJECT_DETAILS.endTarget} className="w-full border rounded px-2 py-1" />
-                </label>
+                <div className="space-y-4 col-span-2">
+                  <label className="grid grid-cols-3 items-center gap-2">
+                    <span className="text-[#324286] col-span-1">Valuation</span>
+                    <input
+                      readOnly
+                      value={PROJECT_DETAILS.valuation}
+                      className="border border-[#C1C1C1] rounded px-3 py-1 w-full col-span-2 font-sm"
+                    />
+                  </label>
 
-                <label className="space-y-1 col-span-2">
-                  <span className="text-[#324286]">Equity Offered</span>
-                  <input readOnly value={PROJECT_DETAILS.equityOffered} className="w-full border rounded px-2 py-1" />
-                </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <label className="grid grid-cols-3 items-center">
+                      <span className="text-[#324286] col-span-2">Start Target</span>
+                      <input
+                        readOnly
+                        value={PROJECT_DETAILS.startTarget}
+                        className="border border-[#C1C1C1] rounded text-center py-1 w-full col-span-1 font-sm"
+                      />
+                    </label>
+
+                    <label className="grid grid-cols-3 items-center">
+                      <span className="text-[#324286] col-span-2">End Target</span>
+                      <input
+                        readOnly
+                        value={PROJECT_DETAILS.endTarget}
+                        className="border border-[#C1C1C1] rounded text-center py-1 w-full col-span-1 font-sm"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="grid grid-cols-3 items-center gap-2">
+                    <span className="text-[#324286] col-span-1">Equity Offered</span>
+                    <input
+                      readOnly
+                      value={PROJECT_DETAILS.equityOffered}
+                      className="border border-[#C1C1C1] rounded px-3 py-1 w-full col-span-2 font-sm"
+                    />
+                  </label>
+                </div>
+
+                <div className="space-y-4 col-span-1">
+                  <div className="flex justify-between items-end">
+                    <label className="flex-1 space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[#324286]">Pitch Deck</span>
+                        <button className="text-xs text-[#64748B] hover:underline">view</button>
+                      </div>
+                      <input
+                        readOnly
+                        value={PROJECT_DETAILS.pitchDeck}
+                        className="w-full border border-[#C1C1C1] rounded text-center py-1"
+                      />
+                    </label>
+                  </div>
+
+                  <button className="w-full rounded-md border border-[#EBEBEB] py-1 bg-white/70 hover:bg-gray-100 text-xs text-[#0F172A] font-medium">
+                    Save Changes
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* right 6/16 (metrics cards) */}
             <div className="col-span-6 space-y-4">
-              <div className="bg-white p-6 rounded-xl space-y-2">
-                <p className="text-[#324286] text-sm">Fund Raised</p>
+              <div className="bg-white/50 p-6 rounded-xl space-y-2">
+                <p className="text-[#324286] text-md font-semibold">Fund Raised</p>
                 <p className="text-4xl font-bold">
                   ${PROJECT_DETAILS.raised.toLocaleString()}
                   <span className="text-lg text-[#324286] font-medium"> / ${PROJECT_DETAILS.goal.toLocaleString()}</span>
                 </p>
-                <div className="h-2 bg-gray-200 rounded-full">
+                <div className="h-2 bg-[F2F2F2] rounded-full">
                   <div
                     className="h-2 bg-black rounded-full"
                     style={{ width: `${(PROJECT_DETAILS.raised / PROJECT_DETAILS.goal) * 100}%` }}
@@ -176,70 +242,105 @@ export default function ProjectDetail() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-4 rounded-xl text-center">
-                  <p className="text-xs text-[#324286]">Investors</p>
+                <div className="bg-white/50 p-4 rounded-xl text-left">
+                  <p className="text-md font-semibold text-[#324286]">Investors</p>
                   <p className="text-2xl font-bold">{PROJECT_DETAILS.investors}</p>
                 </div>
-                <div className="bg-white p-4 rounded-xl text-center">
-                  <p className="text-xs text-[#324286]">Tokens</p>
+                <div className="bg-white/50 p-4 rounded-xl text-left">
+                  <p className="text-md font-semibold text-[#324286]">Tokens</p>
                   <p className="text-2xl font-bold">{PROJECT_DETAILS.tokens}</p>
                 </div>
               </div>
             </div>
 
-            <div className="col-span-6 space-y-3 mt-8 bg-white p-6 rounded-xl">
-              <h2 className="text-xl font-semibold mb-2 text-[#324286]">Discussion</h2>
-              <div className="h-64 overflow-y-auto pr-2 space-y-4">
-                {DiscussionDummy.map((d) => (
-                  <div key={d.id} className="bg-[#F7F7FF] rounded-md p-4 space-y-2">
-                    <p className="text-xs text-gray-400">{d.user} • {d.time}</p>
-                    <p className="text-sm text-gray-800">{d.text}</p>
-                    {d.reply && (
-                      <div className="ml-4 pl-3 border-l text-sm text-gray-600">{d.reply}</div>
+            <div className="col-span-6 bg-white/50 rounded-xl p-6 flex flex-col mt-2 h-96">
+              <h2 className="text-xl font-semibold mb-4 text-[#324286]">Discussion</h2>
+              <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-[#5A5A5A] scrollbar-track-[#F2F2F2] scrollbar-thumb-rounded-lg hover:scrollbar-thumb-[#8486f2]">
+                {DISCUSSION.map((d) => (
+                  <div key={d.id} className="bg-[#FFFFFF]/70 border border-[#EBEBEB] rounded-md p-4 space-y-2 text-sm text-[#0F172A]">
+                    <PostItem item={d} />
+                    {d.replies?.length > 0 && (
+                      <div className="space-y-2 border-t border-[#C1C1C1]">
+                        {d.replies.map((r) => (
+                          <PostItem key={r.id} item={r} isReply />
+                        ))}
+                      </div>
                     )}
                   </div>
                 ))}
+                <div className="h-2" />
               </div>
-              <div className="flex mt-2 gap-2">
-                <input placeholder="Add a new thread or reply" className="input-box flex-1" />
-                <button className="btn-primary w-10 h-10 !p-0 flex items-center justify-center">
-                  <Plus size={18} />
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+                className="mt-3 flex gap-2"
+              >
+                <input
+                  placeholder="Add a new thread or reply"
+                  className="flex-1 rounded-md border border-gray-300 bg-[#F7F7FF] px-4 py-2 text-sm outline-none"/>
+                <button
+                  type="submit"
+                  className="
+                    flex items-center justify-center
+                    w-10 h-10 rounded-md bg-[#324286] hover:bg-[#25346d] active:scale-95
+                  "
+                >
+                  <img src="../assets/send.png" alt="send" className="w-4 h-4" />
                 </button>
-              </div>
+              </form>
             </div>
 
-            <div className="col-span-6 mt-8 bg-white p-6 rounded-xl">
+            <div className="col-span-6 mt-2 bg-white/50 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-2 text-[#324286]">Finance Growth</h2>
               <div className="h-64 flex items-center justify-center text-gray-400">(chart)</div>
             </div>
 
-            {/* Financial Record */}
-            <div className="col-span-4 mt-8 bg-white p-6 rounded-xl flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Financial Record</h2>
-                <button onClick={() => setOpenModal(true)} className="btn-primary !px-2 !py-1 flex items-center gap-1">
-                  <Plus size={16} />
-                </button>
-              </div>
-              <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-                {FINANCE_RECORD.map((r) => (
-                  <div key={r.id} className="border rounded-md p-3 space-y-1 text-sm">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.tag==='income'?'bg-green-100 text-green-700':'bg-gray-100 text-gray-700'}`}>{r.tag}</span>
-                    <p>{r.text}</p>
-                    <p className="text-xs text-gray-400">{r.time}</p>
-                  </div>
+            <div className="col-span-4 mt-2 bg-white/50 p-6 rounded-xl flex flex-col relative h-96">
+              <h2 className="text-lg font-semibold mb-4 text-[#324286]">Financial Record</h2>
+
+              <div className="flex-1 space-y-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#5A5A5A]/80 scrollbar-track-transparent hover:scrollbar-thumb-[#8486F2]">
+                {FINANCE_RECORD.map(r => (
+                  <article key={r.id} className="rounded-xl bg-white/70 border border-[#EBEBEB] p-4">
+                    <header className="flex items-start justify-between">
+                      <span
+                        className={`rounded-full px-3 py-0.5 text-[11px] capitalize text-white
+                          ${r.tag.toLowerCase() === "revenue"
+                            ? "bg-[#60D600]"
+                            : "bg-[#64748B]"}`}
+                      >
+                        {r.tag}
+                      </span>
+                      <time className="text-[11px] text-[#0F172A]">{r.time}</time>
+                    </header>
+                    <p className="mt-2 text-sm text-[#0F172A]">{r.text}</p>
+                  </article>
                 ))}
-                <p className="text-center text-xs text-gray-400">see more</p>
+
+                <div className="h-2" />
+              </div>
+              
+              <div className="items-center mt-3">
+                <button className="mt-4 self-start text-xs text-[#324286] hover:underline">
+                  see more
+                </button>
+
+                <button
+                  onClick={() => setOpenModal(true)}
+                  aria-label="add record"
+                  className="absolute bottom-6 right-6 flex h-10 w-10 items-center justify-center
+                            rounded-lg bg-[#26347F] shadow-md transition hover:bg-[#1b265e]"
+                >
+                  <img src="../assets/add-icon.png" alt="" className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Modal */}
       <Modal open={openModal} onClose={() => setOpenModal(false)} />
-
-      {/* Tailwind helper classes */}
       <style>{`
         .input-box {
           @apply w-full border rounded-md py-1.5 px-3 text-sm bg-[#F4F4FF] focus:outline-none;
