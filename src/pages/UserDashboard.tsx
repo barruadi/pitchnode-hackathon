@@ -1,6 +1,7 @@
 "use client";
 
 import UserNavbar from "../components/UserNavbar";
+import { useState } from "react";
 
 // Dummy Data
 const FUND_DATA = {
@@ -46,7 +47,219 @@ const UPDATES = [
   { user: "You", text: "You invested $400 in StartUp Name", time: "3 days ago" },
 ];
 
+
+;
+
+function FileInput({ id, label, placeholder }: { id: string; label: string; placeholder: string;}) {
+  const [fileName, setFileName] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setFileName(e.target.files[0].name);
+    }
+  };
+
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1 block text-sm font-semibold text-[#64748B]">
+        {label}
+      </label>
+      <label
+        htmlFor={id}
+        className="w-full h-[40px] flex items-center truncate rounded-md border border-[#EBEBEB] px-4 text-sm text-[#64748B] cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+      >
+        {fileName || placeholder}
+      </label>
+      <input
+        id={id}
+        type="file"
+        onChange={handleChange}
+        className="hidden"
+      />
+    </div>
+  );
+}
+
+
+function AddProjectModal({ open, onClose }: {open: boolean; onClose: () => void;}) {
+  const [step, setStep] = useState<1 | 2>(1);
+
+  if (!open) return null;
+
+  const goNext = () => setStep(2);
+  const goPrevOrClose = () => (step === 1 ? onClose() : setStep(1));
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="w-full max-w-xl rounded-xl bg-white p-10 relative min-h-[500px]">
+        <h2 className="mb-8 text-center text-2xl font-semibold text-[#324286]">
+          Add New Project
+        </h2>
+
+        <div className="mb-10 flex items-center justify-center gap-2">
+          <div className="flex flex-col items-center">
+            <span
+              className={`h-4 w-4 rounded-full ${
+                step === 1 ? "bg-[#324286]" : "bg-[#86D010]"
+              }`}
+            />
+            <p className="mt-1 text-[10px] font-medium text-[#64748B] text-center">
+              Project <br /> Information
+            </p>
+          </div>
+
+            <div className={`relative h-0.5 w-32 rounded-full overflow-hidden transition-colors duration-300 
+              ${step === 1 ? "bg-[#D9D9D9]" : "bg-[#324286]" }`}>
+              <div
+                className={`absolute left-0 top-0 h-full w-1/2 transition-all duration-300 ${
+                  step === 1 ? "bg-[#324286]" : "bg-[#86D010]"}`}/>
+            </div>
+
+          <div className="flex flex-col items-center">
+            <span className={`h-4 w-4 rounded-full transition-all duration-200 ${
+              step === 2 ? "bg-[#324286]" : "bg-[#D9D9D9]"
+            }`}/>
+            <p className="mt-1 text-[10px] font-medium text-[#64748B] text-center">
+              Project <br /> Target
+            </p>
+          </div>
+        </div>
+
+        {step === 1 && (
+          <form className="space-y-6 transition-opacity duration-300 opacity-100 pointer-events-auto">
+            <div>
+              <label htmlFor="title" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Project Title
+              </label>
+              <input
+                id="title"
+                placeholder="Add title"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="desc" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Project Description
+              </label>
+              <input
+                id="desc"
+                placeholder="Add description"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="high" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Highlights
+              </label>
+              <input
+                id="high"
+                placeholder="Add project’s highlights and key points"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <FileInput id="uploadImage" label="Upload Image" placeholder="Click to upload image" />
+              <FileInput id="uploadDeck" label="Upload Pitch Deck" placeholder="Click to upload pitch deck" />
+            </div>
+          </form>
+        )}
+
+        {step === 2 && (
+          <form className="space-y-6 transition-opacity duration-300 opacity-100 pointer-events-auto">
+            <div>
+              <label htmlFor="fund" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Funding Nominal Target
+              </label>
+              <input
+                id="fund"
+                placeholder="Add funding nominal target"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="valuation" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Initial Valuation
+              </label>
+              <input
+                id="valuation"
+                placeholder="Add initial valuation"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="equity" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                Equity Offered
+              </label>
+              <input
+                id="equity"
+                placeholder="Add offered equity"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="start" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                  Start Target
+                </label>
+                <input
+                  id="start"
+                  placeholder="Add start target"
+                  className="w-full h-[40px] rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+                />
+              </div>
+              <div>
+                <label htmlFor="end" className="mb-1 block text-sm font-semibold text-[#64748B]">
+                  End Target
+                </label>
+                <input
+                  id="end"
+                  placeholder="Add end target"
+                  className="w-full h-[40px] rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+                />
+              </div>
+            </div>
+          </form>
+        )}
+
+        <div className="mt-10 flex justify-center gap-6">
+          <button
+            type="button"
+            onClick={goPrevOrClose}
+            className="rounded-md px-4 py-2 w-32 border border-gray-400 text-gray-700 hover:bg-gray-100"
+          >
+            Cancel
+          </button>
+
+          {step === 1 ? (
+            <button
+              type="button"
+              onClick={goNext}
+              className="rounded-md px-4 py-2 w-32 bg-[#243B76] text-white hover:bg-[#1a2d5d]"
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="rounded-md px-4 py-2 w-32 bg-[#243B76] text-white hover:bg-[#1a2d5d]"
+            >
+              Add Project
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <>
       <UserNavbar />
@@ -75,7 +288,9 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center mb-4 gap-4">
                 <h2 className="text-[#324286] text-lg font-semibold">Your Projects</h2>
-                <button className="mt-2 px-2 py-1 rounded-md bg-white/70 border border-[#EBEBEB] text-[#0F172A] text-xs font-medium hover:bg-gray-100">
+                <button 
+                onClick={() => setOpenModal(true)}
+                className="mt-2 px-2 py-1 rounded-md bg-white/70 border border-[#EBEBEB] text-[#0F172A] text-xs font-medium hover:bg-gray-100">
                   + Add New Project
                 </button>
               </div>
@@ -143,6 +358,9 @@ export default function DashboardPage() {
           </aside>
         </div>
       </main>
+      <AddProjectModal open={openModal} onClose={() => setOpenModal(false)} />
     </>
   );
 }
+
+//todo: fetch data

@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import UserNavbar from "../components/UserNavbar";
-import { Plus } from "lucide-react";
 
 // ──────────── Dummy Data ────────────
-
 const PROJECT_DETAILS = {
   title: "Project Title",
   description:
@@ -73,26 +71,106 @@ const DISCUSSION = [
 
 function Modal({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-xl w-full max-w-lg p-8 space-y-6">
-        <h2 className="text-xl font-bold text-center">Create Financial Record</h2>
+      <div className="w-full max-w-lg rounded-xl bg-white p-10">
+        <h2 className="mb-8 text-center text-2xl font-semibold text-[#243B76]">
+          Create Financial Record
+        </h2>
 
-        <div className="space-y-4">
-          <input className="input-box" placeholder="Add description" />
-          <input className="input-box" placeholder="Add category" />
-          <div className="grid grid-cols-2 gap-4">
-            <input className="input-box" placeholder="Start date" />
-            <input className="input-box" placeholder="End date" />
+        <form className="space-y-6">
+          <div>
+            <label
+              htmlFor="description"
+              className="mb-1 block text-sm font-semibold text-[#64748B]"
+            >
+              Description
+            </label>
+            <input
+              id="description"
+              type="text"
+              placeholder="Add description"
+              className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+            />
           </div>
-          <input className="input-box" placeholder="Add nominal" />
-        </div>
 
-        <div className="flex justify-end gap-4 pt-6">
-          <button onClick={onClose} className="btn-outline w-28">
+          <div>
+            <label
+              htmlFor="category"
+              className="mb-1 block text-sm font-semibold text-[#64748B]"
+            >
+              Add Category
+            </label>
+            <input
+              id="category"
+              type="text"
+              placeholder="Add category"
+              className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label
+                htmlFor="startDate"
+                className="mb-1 block text-sm font-semibold text-[#64748B]"
+              >
+                Start Date
+              </label>
+              <input
+                id="startDate"
+                type="text"
+                placeholder="Add date"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="endDate"
+                className="mb-1 block text-sm font-semibold text-[#64748B]"
+              >
+                End Date
+              </label>
+              <input
+                id="endDate"
+                type="text" // atau date‑picker?
+                placeholder="Add date"
+                className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="nominal"
+              className="mb-1 block text-sm font-semibold text-[#64748B]"
+            >
+              Nominal
+            </label>
+            <input
+              id="nominal"
+              type="number"
+              placeholder="Add nominal"
+              className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
+            />
+          </div>
+        </form>
+
+        <div className="mt-10 flex justify-center gap-6">
+          <button
+            onClick={onClose}
+            type="button"
+            className="rounded-md px-4 py-2 w-28 border border-gray-400 text-[#64748B] hover:bg-gray-100"
+          >
             Cancel
           </button>
-          <button className="btn-primary w-28">Save</button>
+          <button
+            type="submit"
+            className="rounded-md px-4 py-2 w-28 bg-[#324286] text-white hover:bg-[#1a2d5d]"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
@@ -284,9 +362,7 @@ export default function ProjectDetail() {
                   type="submit"
                   className="
                     flex items-center justify-center
-                    w-10 h-10 rounded-md bg-[#324286] hover:bg-[#25346d] active:scale-95
-                  "
-                >
+                    w-10 h-10 rounded-md bg-[#324286] hover:bg-[#25346d] active:scale-95">
                   <img src="../assets/send.png" alt="send" className="w-4 h-4" />
                 </button>
               </form>
@@ -341,20 +417,8 @@ export default function ProjectDetail() {
       </main>
 
       <Modal open={openModal} onClose={() => setOpenModal(false)} />
-      <style>{`
-        .input-box {
-          @apply w-full border rounded-md py-1.5 px-3 text-sm bg-[#F4F4FF] focus:outline-none;
-        }
-        .btn-primary {
-          @apply bg-[#1C245B] text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-[#273071];
-        }
-        .btn-outline {
-          @apply border text-sm font-medium rounded-md px-4 py-2 hover:bg-gray-100;
-        }
-        .form-label {
-          @apply text-xs text-gray-600 font-medium;
-        }
-      `}</style>
     </>
   );
 }
+
+//todo: fetch data and graph
