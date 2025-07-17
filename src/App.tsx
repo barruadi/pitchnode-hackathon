@@ -7,9 +7,11 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Invest from './pages/Invest';
 import Idea from './pages/Idea';
-import InvestIdea from './pages/InvestIdea';
 import Detail from './pages/Detail';
 import UpdateBusiness from './pages/UpdateBusiness';
+import DiscoverPage from './pages/InvestorDiscover';
+import DashboardPage from './pages/InvestorDashboard';
+import IdeaDetail from './pages/IdeaDetail';
 
 const activeChainId = ChainId.Mumbai;
 
@@ -31,6 +33,9 @@ function App() {
           <Route path="/upload-idea" element={<Idea />} />
           <Route path="/update-business" element={<UpdateBusiness />} />
           <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/idea/:id" element={<IdeaDetail />} />
         </Routes>
       </Router>
     </ThirdwebProvider>
