@@ -30,12 +30,15 @@ const DiscoverPage: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="text-center py-16 px-4 bg-[url('../assets/top-discover.png')]">
-        <h1 className="text-5xl font-bold text-[#324286] mb-4">
+    <div className="min-h-screen bg-[#f1f3ff] relative">
+      <div className="relative text-center py-16 px-4">
+        <div className="absolute inset-0">
+          <img src="../assets/top-discover.png" alt="Discover Banner" className="w-full h-full object-cover opacity-30" />
+        </div>
+        <h1 className="text-5xl font-bold text-[#324286] mb-4 z-10">
           Trustworthy Investing
         </h1>
-        <h2 className="text-5xl font-bold text-[#324286] mb-8">
+        <h2 className="text-5xl font-bold text-[#324286] mb-8 z-10">
           in Brilliant Ideas
         </h2>
         
@@ -54,7 +57,7 @@ const DiscoverPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-16">
+      <div className="max-w-7xl mx-auto px-4 pb-16 bg-[#e8e8ff">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredIdeas.map((idea) => (
             <StartupCard
@@ -63,7 +66,7 @@ const DiscoverPage: React.FC = () => {
               idea,
               () => {
                 console.log("Invest clicked:", idea.id);
-                window.location.href = `/invest/${idea.id}`;
+                window.location.href = `/invest`;
               },
               () => {
                 console.log("Detail clicked:", idea.id);

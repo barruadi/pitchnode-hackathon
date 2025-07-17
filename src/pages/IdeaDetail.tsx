@@ -24,7 +24,7 @@ const IdeaDetail = () => {
       <div className="flex-1 flex overflow-hidden px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex w-full max-w-7xl mx-auto gap-8">
           <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-            <h1 className="text-3xl font-bold text-indigo-900 text-center">{idea.title}</h1>
+            <h1 className="text-7xl font-bold text-indigo-900 text-center">{idea.title}</h1>
             <div className="flex-1 overflow-auto space-y-4 pr-2">
               <div className="bg-white rounded-2xl shadow-lg p-4">
                 <div className="w-full h-48 bg-gray-100 rounded-xl flex items-center justify-center">
