@@ -39,7 +39,6 @@ const DiscoverPage: React.FC = () => {
           in Brilliant Ideas
         </h2>
         
-        {/* Search Bar */}
         <div className="max-w-2xl mx-auto relative">
           <div className="flex items-center bg-white rounded-full shadow-lg px-6 py-4">
             <Filter className="w-5 h-5 text-gray-400 mr-4" />
@@ -55,12 +54,11 @@ const DiscoverPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Idea Cards */}
       <div className="max-w-7xl mx-auto px-4 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredIdeas.map((idea) => (
             <StartupCard
-            key={Number(idea.id)} // karena id itu bigint
+            key={Number(idea.id)}
             {...mapBusinessIdeaToCard(
               idea,
               () => {

@@ -12,7 +12,7 @@ interface ChatMessage {
 
 interface Props {
   ideaId: number;
-  backendActor: any; // dari ic-devtools atau autentikasi login
+  backendActor: any; 
 }
 
 export default function DiscussionSection({ ideaId, backendActor }: Props) {
@@ -25,7 +25,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
     const res = await backendActor.getMessagesByIdea(ideaId);
     console.log('Fetched messages:', res);
     setMessages(res);
-  }; // Added closing brace for fetchMessages function
+  }; 
 
   const cancelReply = () => {
     setReplyingTo(null);
@@ -51,7 +51,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
     setReplyingTo(chatId);
   };
 
-  // Helper function to render messages with replies
+  
   const renderMessage = (msg: ChatMessage, isReply = false) => {
     const replies = messages.filter(m => m.replyTo === msg.chatId);
     
@@ -63,7 +63,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
           </div>
           <div className="text-gray-700 mb-3">{msg.content}</div>
           
-          {/* Action buttons */}
           <div className="flex items-center gap-6 text-sm text-gray-500">
             <button 
               className="flex items-center gap-1 hover:text-blue-600 transition-colors"
@@ -74,7 +73,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
             </button>
           </div>
           
-          {/* Reply input - appears when replying to this message */}
           {replyingTo === msg.chatId && (
             <div className="mt-3 pl-4 border-l-2 border-blue-500">
               <div className="flex gap-2">
@@ -102,7 +100,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
           )}
         </div>
         
-        {/* Render replies */}
         {replies.length > 0 && (
           <div className="mt-2 space-y-2">
             {replies.map(reply => renderMessage(reply, true))}
@@ -118,12 +115,10 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm h-[93vh] flex flex-col">
-      {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200">
         <h3 className="text-2xl font-bold text-gray-800">Discussion</h3>
       </div>
 
-      {/* Messages */}
       <div className="px-6 py-4 space-y-4 flex-1 overflow-y-auto">
         {messages.map(msg => (
           <div key={msg.chatId} className="bg-gray-50 rounded-lg p-4">
@@ -131,7 +126,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
               <span className="font-medium text-gray-800">@{msg.sender.toText?.() ?? String(msg.sender)}</span>
             </div>
             
-            {/* Reply input - appears when replying to this message */}
             {replyingTo === msg.chatId && (
               <div className="mt-3 pl-4 border-l-2 border-blue-500">
                 <div className="flex gap-2">
@@ -159,7 +153,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
             )}
             <div className="text-gray-700 mb-3">{msg.content}</div>
             
-            {/* Action buttons */}
             <div className="flex items-center gap-6 text-sm text-gray-500">
               <button 
                 className="flex items-center gap-1 hover:text-gray-700 transition-colors"
@@ -172,7 +165,6 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
         ))}
       </div>
 
-      {/* Input */}
       <div className="px-6 py-4 border-t border-gray-200">
         <div className="flex gap-3">
           <input

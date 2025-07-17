@@ -5,7 +5,7 @@ import { Businessidea } from "../declarations/backend/backend.did";
 import DiscussionSection from "../components/DiscussionBox";
 
 const IdeaDetail = () => {
-  const { id } = useParams(); // string from URL
+  const { id } = useParams();
   const [idea, setIdea] = useState<Businessidea | null>(null);
 
   useEffect(() => {
@@ -68,7 +68,6 @@ const IdeaDetail = () => {
                 </ul>
               </div>
   
-              {/* Actions */}
               <div className="flex justify-center gap-3">
                 <button className="px-4 py-2 text-sm border border-indigo-600 text-indigo-600 rounded-full hover:bg-indigo-50 transition">
                   View Pitch Deck
@@ -83,7 +82,6 @@ const IdeaDetail = () => {
             </div>
           </div>
   
-          {/* Right Column - Discussion */}
           <div className="w-1/3 h-full overflow-hidden">
             <DiscussionSection ideaId={id ? Number(id) : 0} backendActor={backendActor} />
           </div>
