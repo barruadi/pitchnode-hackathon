@@ -12,6 +12,8 @@ import UpdateBusiness from './pages/UpdateBusiness';
 import DiscoverPage from './pages/InvestorDiscover';
 import DashboardPage from './pages/InvestorDashboard';
 import IdeaDetail from './pages/IdeaDetail';
+import ProjectDetail from './pages/ProjectDetail';
+import UserDashboard from './pages/UserDashboard';
 
 const activeChainId = ChainId.Mumbai;
 
