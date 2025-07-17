@@ -7,9 +7,11 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Invest from './pages/Invest';
 import Idea from './pages/Idea';
-import InvestIdea from './pages/InvestIdea';
 import Detail from './pages/Detail';
 import UpdateBusiness from './pages/UpdateBusiness';
+import DiscoverPage from './pages/InvestorDiscover';
+import DashboardPage from './pages/InvestorDashboard';
+import IdeaDetail from './pages/IdeaDetail';
 import ProjectDetail from './pages/ProjectDetail';
 import UserDashboard from './pages/UserDashboard';
 
@@ -32,8 +34,10 @@ function App() {
           <Route path="/invest" element={<Invest />} />
           <Route path="/upload-idea" element={<Idea />} />
           <Route path="/update-business" element={<UpdateBusiness />} />
-          <Route path="/dashboard" element={<UserDashboard />} />
-          <Route path="/detail/:id" element={<ProjectDetail />} />
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/idea/:id" element={<IdeaDetail />} />
         </Routes>
       </Router>
     </ThirdwebProvider>

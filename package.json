@@ -17,16 +17,20 @@
     "postinstall": "mops install"
   },
   "dependencies": {
+    "@connect2ic/react": "^0.2.0-beta.24",
     "@dfinity/auth-client": "^2.2.0",
     "@fontsource/inter": "^5.1.1",
     "@ic-reactor/react": "^1.14.6",
     "@tailwindcss/vite": "^4.0.0",
     "@thirdweb-dev/react": "^4.9.4",
     "@thirdweb-dev/storage": "^2.0.15",
+    "@types/recharts": "^1.8.29",
     "ipfs-http-client": "^60.0.1",
+    "lucide-react": "^0.525.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.3",
+    "recharts": "^3.1.0",
     "swiper": "^11.2.2",
     "web3": "^4.16.0"
   },
