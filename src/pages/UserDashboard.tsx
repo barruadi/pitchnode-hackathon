@@ -1,6 +1,6 @@
 "use client";
 
-import UserNavbar from "../components/UserNavbar";
+import Navbar from "../components/Navbar";
 import { useState } from "react";
 
 // Dummy Data
@@ -262,7 +262,7 @@ export default function DashboardPage() {
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
-      <UserNavbar />
+      <Navbar />
       <main className="bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 min-h-screen py-8 px-6 md:px-10">
         <div className="max-w-7xl mx-auto flex gap-6">
           <section className="flex-[3] space-y-8">

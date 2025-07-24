@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Filter } from 'lucide-react';
+import Navbar from '../components/Navbar';
 import StartupCard from '../components/StartupCard';
 import { mapBusinessIdeaToCard } from '../utils/helper';
 import { Businessidea } from '../declarations/backend/backend.did';
@@ -30,7 +31,9 @@ const DiscoverPage: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-[#f1f3ff] relative">
+    <>
+    <Navbar/>
+    <div className="min-h-screen bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 relative">
       <div className="relative text-center py-16 px-4">
         <div className="absolute inset-0">
           <img src="../assets/top-discover.png" alt="Discover Banner" className="w-full h-full object-cover opacity-30" />
@@ -84,6 +87,7 @@ const DiscoverPage: React.FC = () => {
         )}
       </div>
     </div>
+  </>
   );
 };
 

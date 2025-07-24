@@ -1,6 +1,8 @@
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react"
+import { useState, useEffect } from 'react';
+import backendActor from './utils/backend';
 import Welcome from './pages/Welcome';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -20,6 +22,29 @@ const activeChainId = ChainId.Mumbai;
 const THIRDWEB_CLIENT_ID = import.meta.env.VITE_THIRDWEB_CLIENT_ID;
 
 function App() {
+  const DashboardRedirect: React.FC = () => {
+    const [user, setUser] = useState<{ role: string } | null>(null);
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        const res = await backendActor.getUser(); // returns ?Text = [] or [value]
+        const role = Array.isArray(res) ? res[0] : null;
+        console.log("Role:", role);
+        setUser(role ? { role } : null);
+      };
+
+      fetchUser();
+    }, []);
+
+    if (!user) return <div>Loading...</div>;
+
+    if (user.role === "Business Owner") {
+      console.log("Business Owner");
+      return <UserDashboard />;
+    }
+    return <DashboardPage />;
+  };
+
   return (
     <ThirdwebProvider 
       clientId={THIRDWEB_CLIENT_ID}
@@ -36,7 +61,7 @@ function App() {
           <Route path="/update-business" element={<UpdateBusiness />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/discover" element={<DiscoverPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DashboardRedirect/>} />
           <Route path="/idea/:id" element={<IdeaDetail />} />
         </Routes>
       </Router>

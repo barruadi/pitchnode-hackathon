@@ -1,15 +1,15 @@
-import "../index.css";
-import { Link } from "react-router-dom";
+'use client';
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import backendActor from "../utils/backend";
-import { useState, useEffect } from "react";
 
-function Navbar() {    
-    const [ role, setRole ] = useState<0 | 1 | 2>(0);
-    // 0: haven't login
-    // 1: investor
-    // 2: business
 
-    const [ update, setUpdate ] = useState<boolean>(false);
+export default function Navbar() {
+  const location = useLocation();
+  const isDiscover = location.pathname === "/discover";
+  const [ role, setRole ] = useState<0 | 1 | 2>(0);
+  const [ username, setUsername ] = useState<string | null>(null);
+  
 
     const fetchRole = async () => {
         try {
@@ -18,9 +18,15 @@ function Navbar() {
                 setRole(1);
             } else if (role[0] === "Business") {
                 setRole(2);
-                const updateFetch = await backendActor.haveBusinessIdea();
-                setUpdate(updateFetch);
             }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const fetchUsername = async () => {
+        try {
+            const username = await backendActor.getUsername();
+            setUsername(username);
         } catch (error) {
             console.error(error);
         }
@@ -28,31 +34,24 @@ function Navbar() {
 
     useEffect(() => {
         fetchRole();
+        fetchUsername();
     }, []);
 
-    return (
-        <div className="flex justify-between items-center w-fill p-2 border-2 border-black rounded-2xl shadow-md m-5">
-            <div className="font-bold px-5">
-                <Link to="/">PitchNode</Link>
-            </div>
-            <div className="flex space-x-40 items-center">
-                <Link to="/invest">Invest</Link>
-                {role === 2 && update === false && <Link to="/upload-idea">Upload Idea</Link>}
-                {role === 2 && update === true && <Link to="/update-business">Upload Idea</Link>}
-                <Link to="/about">About</Link>
-                {role === 0 ? (
-                    <div className="flex space-x-10 items-center">
-                        <Link to="/signin" className="font-bold">Login</Link>
-                        <Link to="/signup" className="rounded-md bg-[#324286] text-white px-5 py-1">Register</Link>
-                    </div>
-                ) : (
-                    <div className="flex space-x-10 items-center px-5 py-1">
-                        <Link to="/profile" className="font-bold">Profile</Link>
-                    </div>
-                )}
-            </div>
-        </div>
-    )
+  return (
+    <header className="w-full bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 py-4 px-6 md:px-10 flex items-center justify-between">
+      <div className="flex items-center">
+        <h1 className="text-xl font-bold text-gray-900">PitchNode</h1>
+      </div>
+      <div>
+        <nav className="flex items-center ml-4 space-x-3">
+          <Link to="/discover" className={`px-3 py-1 rounded-full text-sm ${isDiscover ? "bg-white text-black font-semibold" : "bg-white/50  text-gray-700"}`}>Discover</Link>
+          <Link to="/dashboard" className={`px-3 py-1 rounded-full text-sm ${isDiscover ? "bg-white/50 text-gray-700" : "bg-white text-black font-semibold"}`}>Dashboard</Link>
+        </nav>
+      </div>
+      <Link to={role === 0 ? "/welcome" : "/profile"} className="flex items-center space-x-4">
+        <p className="text-sm text-gray-800">{role === 0 ? "Login" : username}</p>
+        <div className="w-6 h-6 rounded-full bg-gray-300" />
+      </Link>
+    </header>
+  );
 }
-
-export default Navbar;

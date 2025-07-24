@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import UserNavbar from "../components/UserNavbar";
+import Navbar from "../components/Navbar";
 
 // ──────────── Dummy Data ────────────
 const PROJECT_DETAILS = {
@@ -209,7 +209,7 @@ export default function ProjectDetail() {
 
   return (
     <>
-      <UserNavbar />
+      <Navbar />
       <main className="bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 min-h-screen py-4 px-6 md:px-10">
         <div className="mx-auto w-full max-w-7xl bg-white/50 rounded-2xl py-8 px-6">
           <div className="grid grid-cols-16 gap-6">
