@@ -1,5 +1,5 @@
 import "../index.css";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar";
 import FeatureBox from "../components/FeatureBox";
 import { Link } from "react-router-dom";
 

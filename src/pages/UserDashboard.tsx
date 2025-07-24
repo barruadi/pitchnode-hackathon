@@ -2,6 +2,7 @@
 
 import Navbar from "../components/Navbar";
 import { useState } from "react";
+import { Link} from "react-router-dom";
 
 // Dummy Data
 const FUND_DATA = {
@@ -316,7 +317,9 @@ export default function DashboardPage() {
                     <div className="text-right">
                       <p className="font-semibold text-lg text-[#324286]">{project.raised}</p>
                       <p className="text-xs text-[#64748B]">raised</p>
-                      <button className="mt-2 px-3 py-1 text-xs text-[#0F172A] border-2 border-[#EBEBEB] rounded-md hover:bg-gray-100">View More</button>
+                      <Link 
+                      to={`/project/${project.id}`}
+                      className="mt-2 px-3 py-1 text-xs text-[#0F172A] border-2 border-[#EBEBEB] rounded-md hover:bg-gray-100">View More</Link>
                     </div>
                   </div>
                 ))}

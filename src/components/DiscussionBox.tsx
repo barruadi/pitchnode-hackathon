@@ -59,7 +59,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
       <div key={msg.chatId} className={`${isReply ? 'ml-8 border-l-2 border-gray-200 pl-4' : ''}`}>
         <div className="bg-gray-50 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
-            <span className="font-medium text-gray-800">@{msg.sender.toText?.() ?? String(msg.sender)}</span>
+            <span className="font-medium text-gray-800">@{String(msg.sender)}</span>
           </div>
           <div className="text-gray-700 mb-3">{msg.content}</div>
           
@@ -78,7 +78,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
               <div className="flex gap-2">
                 <input
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                  placeholder={`Reply to @${msg.sender.toText?.() ?? String(msg.sender)}...`}
+                  placeholder={`Reply to @${String(msg.sender)}...`}
                   value={replyMessage}
                   onChange={e => setReplyMessage(e.target.value)}
                   onKeyPress={e => e.key === 'Enter' && sendReply()}
@@ -123,7 +123,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
         {messages.map(msg => (
           <div key={msg.chatId} className="bg-gray-50 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="font-medium text-gray-800">@{msg.sender.toText?.() ?? String(msg.sender)}</span>
+              <span className="font-medium text-gray-800">@{String(msg.sender)}</span>
             </div>
             
             {replyingTo === msg.chatId && (
@@ -131,7 +131,7 @@ export default function DiscussionSection({ ideaId, backendActor }: Props) {
                 <div className="flex gap-2">
                   <input
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    placeholder={`Reply to @${msg.sender.toText?.() ?? String(msg.sender)}...`}
+                    placeholder={`Reply to @${String(msg.sender)}...`}
                     value={replyMessage}
                     onChange={e => setReplyMessage(e.target.value)}
                     onKeyPress={e => e.key === 'Enter' && sendReply()}

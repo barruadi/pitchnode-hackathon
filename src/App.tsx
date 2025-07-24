@@ -38,8 +38,8 @@ function App() {
 
     if (!user) return <div>Loading...</div>;
 
-    if (user.role === "Business Owner") {
-      console.log("Business Owner");
+    if (user.role === "Business") {
+      console.log("Business");
       return <UserDashboard />;
     }
     return <DashboardPage />;
@@ -60,6 +60,7 @@ function App() {
           <Route path="/upload-idea" element={<Idea />} />
           <Route path="/update-business" element={<UpdateBusiness />} />
           <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/dashboard" element={<DashboardRedirect/>} />
           <Route path="/idea/:id" element={<IdeaDetail />} />

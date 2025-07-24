@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import IdeaCard from "../components/IdeaCard";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar";
 import backendActor from "../utils/backend";
 import { Principal } from "@dfinity/principal";
 

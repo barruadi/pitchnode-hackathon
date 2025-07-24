@@ -55,7 +55,7 @@ const DISCUSSION = [
     comments: 2,
     replies: [
       {
-        id: '2-1',
+        id: 3,
         user: '@founder',
         time: '2 days ago',
         text: "We're raising funds to scale our go-to-market & strengthen our AI core.",
@@ -67,7 +67,16 @@ const DISCUSSION = [
   },
 ];
 
-
+type Comment = {
+  id: number;
+  user: string;
+  time: string;
+  text: string;
+  likes: number;
+  dislikes: number;
+  comments: number;
+  replies?: Comment[];
+};
 
 function Modal({ open, onClose }: { open: boolean; onClose: () => void }) {
   if (!open) return null;
@@ -177,7 +186,7 @@ function Modal({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-function PostItem({ item, isReply = false }) {
+function PostItem({ item, isReply = false }: { item: Comment; isReply?: boolean }) {
   return (
     <div className={`space-y-2 ${isReply ? 'mt-2' : ''}`}>
       <p className="text-xs text-[#64748B]">
