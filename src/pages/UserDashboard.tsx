@@ -1,8 +1,9 @@
 "use client";
 
 import Navbar from "../components/Navbar";
-import { useState } from "react";
-import { Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import backendActor from "../utils/backend";
+import { Link } from "react-router-dom";
 
 // Dummy Data
 const FUND_DATA = {
@@ -24,7 +25,8 @@ const PROJECTS = [
     valuation: "$123K",
     target: "3–12%",
     investors: 12,
-    raised: "$957",
+    raisedAmount: 243,
+    fundingGoal: 530,
     progressNote: "12%",
   },
   {
@@ -34,7 +36,8 @@ const PROJECTS = [
     valuation: "$123K",
     target: "3–12%",
     investors: 12,
-    raised: "$957",
+    raisedAmount: 957,
+    fundingGoal: 1000,
     progressNote: "12%",
   },
 ];
@@ -48,8 +51,6 @@ const UPDATES = [
   { user: "You", text: "You invested $400 in StartUp Name", time: "3 days ago" },
 ];
 
-
-;
 
 function FileInput({ id, label, placeholder }: { id: string; label: string; placeholder: string;}) {
   const [fileName, setFileName] = useState("");
@@ -261,6 +262,36 @@ function AddProjectModal({ open, onClose }: {open: boolean; onClose: () => void;
 
 export default function DashboardPage() {
   const [openModal, setOpenModal] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [totalRaised, setTotalRaised] = useState(0);
+  const [totalGoal, setTotalGoal] = useState(0);
+  const [totalInvestors, setTotalInvestors] = useState(0);
+  const [updates, setUpdates] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const ideas = await backendActor.getIdeasByUser();
+        setProjects(ideas);
+
+        const raised = ideas.reduce((acc: number, p: any) => acc + Number(p.raisedAmount), 0);
+        const goal = ideas.reduce((acc: number, p: any) => acc + Number(p.fundingGoal), 0);
+        setTotalRaised(raised);
+        setTotalGoal(goal);
+
+        const investorCounts = await Promise.all(
+          ideas.map((p) => backendActor.getTotalInvestor(BigInt(p.id)))
+        );
+        setTotalInvestors(investorCounts.reduce((a, b) => a + Number(b), 0));
+
+        //TODO: Get updates
+      } catch (e) {
+        console.error("Dashboard fetch error", e);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -271,16 +302,16 @@ export default function DashboardPage() {
               <div className="bg-[#FFFFFF]/50 p-6 rounded-xl shadow-sm space-y-2 col-span-2">
                 <p className="text-[#324286] text-sm font-medium">Total Fund Raised</p>
                 <div className="text-3xl font-bold text-black">
-                  ${FUND_DATA.raised.toLocaleString()} <span className="text-[#324286] text-lg">/ ${FUND_DATA.goal.toLocaleString()}</span>
+                  ${totalRaised.toLocaleString()} <span className="text-[#324286] text-lg">/ ${totalGoal.toLocaleString()}</span>
                 </div>
                 <div className="w-full h-2 bg-gray-200 rounded-full">
-                  <div className="h-2 bg-black rounded-full" style={{ width: `${(FUND_DATA.raised / FUND_DATA.goal) * 100}%` }} />
+                  <div className="h-2 bg-black rounded-full" style={{ width: `${(totalGoal ? totalRaised / totalGoal : 0) * 100}%` }} />
                 </div>
                 <p className="text-md text-[#324286]">Trending up this month • <span className="text-[#64748B] text-sm">{FUND_DATA.growth}</span></p>
               </div>
               <div className="bg-[#FFFFFF]/50 p-6 rounded-xl shadow-sm space-y-2">
                 <p className="text-[#324286] text-sm font-medium">Total Investors</p>
-                <p className="text-3xl font-bold">{INVESTOR_DATA.total}</p>
+                <p className="text-3xl font-bold">{totalInvestors}</p>
                 <p className="text-sm text-[#324286]">New investor gained</p>
                 <p className="text-xs text-[#64748B]">{INVESTOR_DATA.growth}</p>
               </div>
@@ -304,7 +335,7 @@ export default function DashboardPage() {
                       <div>
                         <div className="flex gap-2">
                           <h3 className="font-semibold">{project.title}</h3>
-                          <p className="bg-white/70 rounded-md border border-[#EBEBEB] text-xs text-[#60D600] font-medium">{project.progressNote} <span className="text-xs text-[#0F172A]"></span></p>
+                          <p className="bg-white/70 rounded-md border border-[#EBEBEB] px-1 flex items-center justify-center text-xs text-[#60D600] font-medium">{`${((1-(project.raisedAmount / project.fundingGoal)) * 100).toFixed(0)}% `}<span className="text-xs text-[#0F172A]">  to go</span></p>
                         </div>
                         <p className="text-sm text-[#324286]">{project.description}</p>
                         <div className="flex gap-4 text-xs mt-2 text-[#324286]">
@@ -315,11 +346,11 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-lg text-[#324286]">{project.raised}</p>
-                      <p className="text-xs text-[#64748B]">raised</p>
+                      <p className="font-semibold text-lg text-[#324286]">${project.raisedAmount}</p>
+                      <p className="text-xs text-[#64748B] mb-2">raised</p>
                       <Link 
                       to={`/project/${project.id}`}
-                      className="mt-2 px-3 py-1 text-xs text-[#0F172A] border-2 border-[#EBEBEB] rounded-md hover:bg-gray-100">View More</Link>
+                      className="px-3 py-1 text-xs text-[#0F172A] border-2 border-[#EBEBEB] rounded-md hover:bg-gray-100">View More</Link>
                     </div>
                   </div>
                 ))}
@@ -365,5 +396,3 @@ export default function DashboardPage() {
     </>
   );
 }
-
-//todo: fetch data

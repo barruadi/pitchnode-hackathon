@@ -1,7 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import Chart from "../components/Chart";
+import { useParams } from "react-router-dom";
+import backendActor from "../utils/backend";
+import { Businessidea } from "../declarations/backend/backend.did";
+
 
 // ──────────── Dummy Data ────────────
 const PROJECT_DETAILS = {
@@ -215,6 +220,19 @@ function PostItem({ item, isReply = false }: { item: Comment; isReply?: boolean 
 
 export default function ProjectDetail() {
   const [openModal, setOpenModal] = useState(false);
+  const { id } = useParams();
+  const [idea, setIdea] = useState<Businessidea | null>(null);
+
+  useEffect(() => {
+    const fetchIdea = async () => {
+      if (!id) return;
+      const detail = await backendActor.getIdeaDetail(BigInt(id));
+      setIdea(detail);
+    };
+    fetchIdea();
+  }, [id]);
+
+  if (!idea) return <p>Loading...</p>;
 
   return (
     <>
@@ -227,12 +245,18 @@ export default function ProjectDetail() {
               <div className="bg-white/50 rounded-md p-4 text-sm">
                 <h4 className="font-semibold mb-2 text-[#324286]">Project Highlights</h4>
                 <ul className="list-disc marker:mr-0.5 marker:text-[#64748B] list-inside space-y-0.5 text-[#64748B] text-[10px]">
-                  {PROJECT_DETAILS.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-1">
-                      <span className="mt-[1px] text-[10px] leading-none">•</span>
-                      <span>{h}</span>
-                    </li>
-                  ))}
+                  { PROJECT_DETAILS.highlights.length > 0 ? PROJECT_DETAILS.highlights.map((h) => ( //change back to idea.highlights sfter fixing the business idea field
+                      <li key={h} className="flex items-start gap-1">
+                        <span className="mt-[1px] text-[10px] leading-none">•</span>
+                        <span>{h}</span>
+                      </li>
+                    )) : (
+                      <li className="flex items-start gap-1">
+                        <span className="mt-[1px] text-[10px] leading-none">•</span>
+                        <span>None</span>
+                      </li>
+                    )}
+
                 </ul>
               </div>
             </div>
@@ -240,13 +264,13 @@ export default function ProjectDetail() {
             <div className="col-span-6 space-y-4">
               <div className="inline-flex items-baseline gap-2">
                 <h1 className="text-4xl font-bold leading-tight">
-                  {PROJECT_DETAILS.title}
+                  {idea.title === "NaN" ? PROJECT_DETAILS.title : idea.title}
                 </h1>
                 <button className="text-xs text-[#64748B] hover:underline">edit</button>
               </div>
 
               <p className="text-sm text-[#324286]">
-                {PROJECT_DETAILS.description}
+                {idea.description === "NaN" ? PROJECT_DETAILS.description : idea.description}
               </p>
 
               <div className="grid grid-cols-3 gap-6 text-xs">
@@ -377,9 +401,10 @@ export default function ProjectDetail() {
               </form>
             </div>
 
-            <div className="col-span-6 mt-2 bg-white/50 p-6 rounded-xl">
+            <div className="col-span-6 mt-2 bg-white/50 p-6 rounded-xl"> {/* TODO: fix height to match */}
               <h2 className="text-xl font-semibold mb-2 text-[#324286]">Finance Growth</h2>
-              <div className="h-64 flex items-center justify-center text-gray-400">(chart)</div>
+              <Chart /> {/* TODO: Personalize chart */}
+              {/* <div className="h-64 flex items-center justify-center text-gray-400">(chart)</div> */}
             </div>
 
             <div className="col-span-4 mt-2 bg-white/50 p-6 rounded-xl flex flex-col relative h-96">
@@ -429,5 +454,3 @@ export default function ProjectDetail() {
     </>
   );
 }
-
-//todo: fetch data and graph

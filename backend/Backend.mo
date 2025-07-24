@@ -245,6 +245,14 @@ actor PitchNode {
 		return List.toArray(ideas);
 	};
 
+	public query(ic) func getIdeasByUser() : async [Businessidea] {
+		let caller = ic.caller;
+		let ideasByUser = List.filter(ideas, func(i: Businessidea) : Bool {
+			i.owner == caller
+		});
+		return List.toArray(ideasByUser);
+	};
+
 	public query func getInvestmentsByIdea(ideaId : Nat) : async [(Principal, Float)] {
 		for (idea in List.toIter<Businessidea>(ideas)) {
 			if (idea.id == ideaId) {
