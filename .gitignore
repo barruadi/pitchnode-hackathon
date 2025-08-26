@@ -38,3 +38,5 @@ dist-ssr
 .env.production
 
 notes.md
+
+package-lock.json
