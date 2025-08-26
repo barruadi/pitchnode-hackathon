@@ -35,6 +35,7 @@
     "web3": "^4.16.0"
   },
   "devDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.48.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@types/react": "^18.3.12",
