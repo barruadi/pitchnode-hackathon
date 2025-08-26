@@ -49,7 +49,7 @@ export default function Navbar() {
         </nav>
       </div>
       <Link to={role === 0 ? "/welcome" : "/profile"} className="flex items-center space-x-4">
-        <p className="text-sm text-gray-800">{role === 0 ? "Login" : username}</p>
+        <p className="text-sm text-gray-800">Barru Adi</p>
         <div className="w-6 h-6 rounded-full bg-gray-300" />
       </Link>
     </header>

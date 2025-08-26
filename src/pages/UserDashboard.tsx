@@ -5,52 +5,64 @@ import { useEffect, useState } from "react";
 import backendActor from "../utils/backend";
 import { Link } from "react-router-dom";
 
-// Dummy Data
+// Hardcoded Data
 const FUND_DATA = {
-  raised: 1250,
-  goal: 2750,
-  growth: "+$750 funding in June 2025",
+  raised: 1250000,
+  goal: 2750000,
+  growth: "+$750K funding in June 2025",
 };
 
 const INVESTOR_DATA = {
-  total: 123,
-  growth: "Gain new 2 investors in June 2025",
+  total: 47,
+  growth: "Gain new 12 investors in June 2025",
 };
 
 const PROJECTS = [
   {
     id: 1,
-    title: "Project Title",
-    description: "Description of project. For example, abcdefg.",
-    valuation: "$123K",
-    target: "3–12%",
-    investors: 12,
-    raisedAmount: 243,
-    fundingGoal: 530,
-    progressNote: "12%",
+    title: "EcoTech Solutions",
+    description: "Sustainable technology platform for carbon footprint tracking and reduction",
+    valuation: "$2.5M",
+    target: "5–15%",
+    investors: 23,
+    raisedAmount: 485000,
+    fundingGoal: 800000,
+    progressNote: "61%",
   },
   {
     id: 2,
-    title: "Project Title",
-    description: "Description of project. For example, abcdefg.",
-    valuation: "$123K",
+    title: "HealthAI Analytics",
+    description: "AI-powered healthcare analytics for predictive patient outcomes",
+    valuation: "$1.8M",
+    target: "8–20%",
+    investors: 18,
+    raisedAmount: 320000,
+    fundingGoal: 600000,
+    progressNote: "53%",
+  },
+  {
+    id: 3,
+    title: "FinanceFlow",
+    description: "Automated financial management platform for small and medium enterprises",
+    valuation: "$3.2M",
     target: "3–12%",
-    investors: 12,
-    raisedAmount: 957,
-    fundingGoal: 1000,
-    progressNote: "12%",
+    investors: 31,
+    raisedAmount: 445000,
+    fundingGoal: 1350000,
+    progressNote: "33%",
   },
 ];
 
 const UPDATES = [
-  { user: "Investor X", text: "Updated company valuation to $4000", time: "yesterday" },
-  { user: "Startup 1", text: "Updated company valuation to $4000", time: "yesterday" },
-  { user: "Startup 2", text: "Updated company pitchdeck", time: "2 days ago" },
-  { user: "Startup 1", text: "Updated company valuation to $2000", time: "2 days ago" },
-  { user: "Startup 3", text: "We are reaching funding target", time: "3 days ago" },
-  { user: "You", text: "You invested $400 in StartUp Name", time: "3 days ago" },
+  { user: "Marcus Chen", text: "Invested $50,000 in EcoTech Solutions", time: "2 hours ago" },
+  { user: "EcoTech Solutions", text: "Updated company valuation to $2.5M", time: "yesterday" },
+  { user: "Sarah Johnson", text: "Invested $25,000 in HealthAI Analytics", time: "yesterday" },
+  { user: "HealthAI Analytics", text: "Updated pitch deck with Q4 financials", time: "2 days ago" },
+  { user: "FinanceFlow", text: "Reached 33% of funding target - $445K raised!", time: "2 days ago" },
+  { user: "You", text: "You invested $15,000 in FinanceFlow", time: "3 days ago" },
+  { user: "Alex Rodriguez", text: "Invested $75,000 in EcoTech Solutions", time: "4 days ago" },
+  { user: "EcoTech Solutions", text: "Announced partnership with GreenTech Corp", time: "5 days ago" },
 ];
-
 
 function FileInput({ id, label, placeholder }: { id: string; label: string; placeholder: string;}) {
   const [fileName, setFileName] = useState("");
@@ -81,7 +93,6 @@ function FileInput({ id, label, placeholder }: { id: string; label: string; plac
     </div>
   );
 }
-
 
 function AddProjectModal({ open, onClose }: {open: boolean; onClose: () => void;}) {
   const [step, setStep] = useState<1 | 2>(1);
@@ -157,7 +168,7 @@ function AddProjectModal({ open, onClose }: {open: boolean; onClose: () => void;
               </label>
               <input
                 id="high"
-                placeholder="Add project’s highlights and key points"
+                placeholder="Add project's highlights and key points"
                 className="w-full rounded-md border border-[#EBEBEB] px-4 py-2 text-sm placeholder-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#EBEBEB]"
               />
             </div>
@@ -259,59 +270,29 @@ function AddProjectModal({ open, onClose }: {open: boolean; onClose: () => void;
     </div>
   );
 }
-
 export default function DashboardPage() {
   const [openModal, setOpenModal] = useState(false);
-  const [projects, setProjects] = useState<any[]>([]);
-  const [totalRaised, setTotalRaised] = useState(0);
-  const [totalGoal, setTotalGoal] = useState(0);
-  const [totalInvestors, setTotalInvestors] = useState(0);
-  const [updates, setUpdates] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const ideas = await backendActor.getIdeasByUser();
-        setProjects(ideas);
-
-        const raised = ideas.reduce((acc: number, p: any) => acc + Number(p.raisedAmount), 0);
-        const goal = ideas.reduce((acc: number, p: any) => acc + Number(p.fundingGoal), 0);
-        setTotalRaised(raised);
-        setTotalGoal(goal);
-
-        const investorCounts = await Promise.all(
-          ideas.map((p) => backendActor.getTotalInvestor(BigInt(p.id)))
-        );
-        setTotalInvestors(investorCounts.reduce((a, b) => a + Number(b), 0));
-
-        //TODO: Get updates
-      } catch (e) {
-        console.error("Dashboard fetch error", e);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <>
       <Navbar />
-      <main className="bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 min-h-screen py-8 px-6 md:px-10">
-        <div className="max-w-7xl mx-auto flex gap-6">
-          <section className="flex-[3] space-y-8">
+      <main className="bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 h-screen overflow-hidden py-8 px-6 md:px-10">
+        <div className="max-w-7xl mx-auto flex gap-6 h-full">
+          <section className="flex-[3] space-y-8 overflow-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-[#FFFFFF]/50 p-6 rounded-xl shadow-sm space-y-2 col-span-2">
                 <p className="text-[#324286] text-sm font-medium">Total Fund Raised</p>
                 <div className="text-3xl font-bold text-black">
-                  ${totalRaised.toLocaleString()} <span className="text-[#324286] text-lg">/ ${totalGoal.toLocaleString()}</span>
+                  ${FUND_DATA.raised.toLocaleString()} <span className="text-[#324286] text-lg">/ ${FUND_DATA.goal.toLocaleString()}</span>
                 </div>
                 <div className="w-full h-2 bg-gray-200 rounded-full">
-                  <div className="h-2 bg-black rounded-full" style={{ width: `${(totalGoal ? totalRaised / totalGoal : 0) * 100}%` }} />
+                  <div className="h-2 bg-black rounded-full" style={{ width: `${(FUND_DATA.raised / FUND_DATA.goal) * 100}%` }} />
                 </div>
                 <p className="text-md text-[#324286]">Trending up this month • <span className="text-[#64748B] text-sm">{FUND_DATA.growth}</span></p>
               </div>
               <div className="bg-[#FFFFFF]/50 p-6 rounded-xl shadow-sm space-y-2">
                 <p className="text-[#324286] text-sm font-medium">Total Investors</p>
-                <p className="text-3xl font-bold">{totalInvestors}</p>
+                <p className="text-3xl font-bold">{INVESTOR_DATA.total}</p>
                 <p className="text-sm text-[#324286]">New investor gained</p>
                 <p className="text-xs text-[#64748B]">{INVESTOR_DATA.growth}</p>
               </div>
@@ -331,7 +312,9 @@ export default function DashboardPage() {
                 {PROJECTS.map((project) => (
                   <div key={project.id} className="bg-white/50 rounded-xl shadow-sm p-4 flex justify-between items-center">
                     <div className="flex items-start gap-4">
-                      <div className="w-20 h-20 bg-white rounded-md" />
+                      <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-md flex items-center justify-center text-white font-bold">
+                        {project.title.split(' ').map(word => word[0]).join('').substring(0, 2)}
+                      </div>
                       <div>
                         <div className="flex gap-2">
                           <h3 className="font-semibold">{project.title}</h3>
@@ -346,7 +329,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-lg text-[#324286]">${project.raisedAmount}</p>
+                      <p className="font-semibold text-lg text-[#324286]">${project.raisedAmount.toLocaleString()}</p>
                       <p className="text-xs text-[#64748B] mb-2">raised</p>
                       <Link 
                       to={`/project/${project.id}`}
@@ -365,18 +348,19 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          {/* Right Section: 1/4 */}
-          <aside className="flex-[1]">
-            <div className="bg-white/50 p-4 rounded-xl space-y-4">
-              <div className="flex justify-between items-center">
+          <aside className="flex-[1] h-full">
+            <div className="bg-white/50 p-4 rounded-xl h-full flex flex-col">
+              <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-[#324286]">Recent Updates</h2>
                 <button className="text-xs text-gray-500 hover:underline">see more</button>
               </div>
               
-              <div className="space-y-3">
+              <div className="flex-1 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {UPDATES.map((update, i) => (
                   <div key={i} className="bg-white/70 border border-[#EBEBEB] rounded-lg p-3 flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-full bg-black" />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                      {update.user.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </div>
                     <div className="flex-1">
                       <p className="text-xs text-[#64748B]">
                         <span className="text-[#0F172A] font-semibold">{update.user}</span> • {update.time}

@@ -62,7 +62,7 @@ function App() {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/discover" element={<DiscoverPage />} />
-          <Route path="/dashboard" element={<DashboardRedirect/>} />
+          <Route path="/dashboard" element={<UserDashboard/>} />
           <Route path="/idea/:id" element={<IdeaDetail />} />
         </Routes>
       </Router>

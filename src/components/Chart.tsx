@@ -11,7 +11,7 @@ const Chart: React.FC = () => {
       </div>
 
       <div>
-        <p className="text-sm text-gray-500">Ini apa ya</p>
+        <p className="text-sm text-gray-500">Value</p>
         <p className="text-3xl font-bold text-gray-900 my-2">$35,352.02</p>
       </div>
 
