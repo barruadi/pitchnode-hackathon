@@ -20,9 +20,9 @@ function Welcome() {
                 </div>
             </div>
 
-            <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">
-                <p className="text-white mb-10 text-3xl font-bold text-left">Create Your Account</p>
-                
+            <div className="w-1/2 bg-white h-full flex justify-center items-center flex-col rounded-l-4xl">
+                <p className="text-gray-800 mb-10 text-3xl font-bold text-left">Register Your Account</p>
+
                 <a href="/signup">
                     <div className="p-0.5 rounded-2xl mb-10 mt-10 hover:scale-105 transition-transform duration-300 ease-in-out max-w-md sm:max-w-lg lg:max-w-xl w-full outline outline-[#9BAEFF] outline-offset-2">
                         <div className="text-center p-8 rounded-2xl mx-10">

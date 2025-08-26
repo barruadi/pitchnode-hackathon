@@ -45,7 +45,7 @@ const Auth: React.FC = () => {
                 </div>
             </div>
 
-            <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">
+            <div className="w-1/2 bg-white h-full flex justify-center items-center flex-col rounded-l-4xl">
                 <div className="min-h-screen flex items-center justify-center px-4">
                     <div className="w-full lg:w-xl md:w-md sm:w-sm rounded-2xl p-8 mx-4">
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
@@ -63,7 +63,7 @@ const Auth: React.FC = () => {
                             </form>
                         ) : (
                             <>
-                            <p className='text-white'>logged in as : {principal}</p>
+                            <p className='text-gray-800'>logged in as : {principal}</p>
                             <form onSubmit={logout} className='space-y-6'>
                             <button
                                 type="submit"

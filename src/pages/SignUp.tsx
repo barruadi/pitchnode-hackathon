@@ -31,7 +31,7 @@ const Register: React.FC = () => {
                 </div>
             </div>
 
-            <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">
+            <div className="w-1/2 bg-white h-full flex justify-center items-center flex-col rounded-l-4xl">
                 <div className="min-h-screen flex items-center justify-center px-4">
                     <div className="w-full lg:w-xl md:w-md sm:w-sm rounded-2xl p-8 mx-4">
                         <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#9BAEFF] to-[#BF52FF] mb-8 text-center">
@@ -42,13 +42,13 @@ const Register: React.FC = () => {
                             value={username} 
                             onChange={(e) => setUsername(e.target.value)} 
                             placeholder="Enter your username" 
-                            className="w-full bg-[#1E0A29] text-white p-2 rounded-lg mb-4"
+                            className="w-full bg-white text-gray-800 p-2 rounded-lg mb-4 border"
                         />
-                        <select value={role} onChange={(e) => setRole(e.target.value as "Investor" | "Business")} className="w-full bg-[#1E0A29] text-white p-2 rounded-lg">
+                        <select value={role} onChange={(e) => setRole(e.target.value as "Investor" | "Business")} className="w-full bg-white text-gray-800 p-2 rounded-lg border">
                             <option value="Investor">Investor</option>
                             <option value="Business">Business</option>
                         </select>
-                        <button onClick={registerUser} className='w-full bg-white rounded-full p-2 my-5'>Register</button>
+                        <button onClick={registerUser} className='w-full bg-[#9BAEFF] text-white rounded-full p-2 my-5'>Register</button>
                     </div>
                 </div>
             </div>
