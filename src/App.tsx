@@ -56,14 +56,12 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/invest" element={<Invest />} />
           <Route path="/upload-idea" element={<Idea />} />
           <Route path="/update-business" element={<UpdateBusiness />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/dashboard" element={<UserDashboard/>} />
-          <Route path="/idea/:id" element={<IdeaDetail />} />
         </Routes>
       </Router>
     </ThirdwebProvider>

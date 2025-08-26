@@ -80,65 +80,137 @@ const Idea: React.FC = () => {
     };
 
     return (
-        <div className="">
-            <Navbar></Navbar>
-            <div className="grid grid-cols-4 grid-rows-4 gap-4 h-full w-full">
-                <div className="col-span-2 row-span-4 flex justify-center">
-                    <div className="w-full h-full px-10 py-4 flex flex-col justify-center gap-2">
-                        <p className="text-black mx-2">Idea Title</p>
-                        <input
-                            type="text"
-                            placeholder="Enter your Idea Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="border-2 border-gray-300 rounded-lg p-2 mx-2"
-                        />
-                        <p className="text-black mx-2 mt-1.5">Funding Goal</p>
-                        <input
-                            type="number"
-                            placeholder="Funding Goal"
-                            value={fundingGoal}
-                            onChange={(e) => setFundingGoal(parseInt(e.target.value))}
-                            className="border-2 border-gray-300 rounded-lg p-2 mx-2"
-                        />
-                        <p className="text-black mx-2 mt-1.5">Equity</p>
-                        <input
-                            type="number"
-                            placeholder="Equity Percentage"
-                            value={equity}
-                            onChange={(e) => setEquity(parseInt(e.target.value))}
-                            className="border-2 border-gray-300 rounded-lg p-2 mx-2"
-                        />
-                        <p className="text-black mx-2 mt-1.5">Description</p>
-                        <textarea
-                            placeholder="Describe your business idea"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="border-2 border-gray-300 rounded-lg p-2 mx-2 h-36 resize-none"
-                        /> 
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <div className="max-w-6xl mx-auto px-6 py-8">
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
+                        <h1 className="text-3xl font-bold text-white">Share Your Business Idea</h1>
+                        <p className="text-blue-100 mt-2">Present your vision to potential investors</p>
                     </div>
-                </div>
-                <div className="col-span-2 row-span-3 col-start-3 flex justify-center">
-                    <div className="w-full h-full px-4 py-4 flex flex-col justify-center gap-2">
-                        <p className="text-black mx-2 mt-1.5">Related Image</p>
-                        <label className="border-2 border-gray-300 rounded-lg p-2 mx-2 h-50 resize-none items-center flex flex-col cursor-pointer">
-                            Upload Image
-                            <input
-                                type="file"
-                                accept=".png, .jpg, .jpeg"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setImageFile(e.target.files?.[0] || null)}
-                                className="hidden"
-                            />
-                        </label>
+                    
+                    <div className="p-8">
+                        <div className="grid lg:grid-cols-2 gap-8"></div>
+                            {/* Left Column - Form Fields */}
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Idea Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter your Idea Title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                                    />
+                                </div>
+
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Funding Goal ($)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            placeholder="0"
+                                            value={fundingGoal}
+                                            onChange={(e) => setFundingGoal(parseInt(e.target.value))}
+                                            className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                            Equity (%)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            placeholder="0"
+                                            value={equity}
+                                            onChange={(e) => setEquity(parseInt(e.target.value))}
+                                            className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        placeholder="Describe your business idea in detail..."
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        rows={6}
+                                        className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors resize-none"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Right Column - Image Upload */}
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Related Image
+                                    </label>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
+                                        <label className="cursor-pointer">
+                                            <div className="space-y-4">
+                                                <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                                                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-gray-700">
+                                                        {imageFile ? imageFile.name : 'Upload an image'}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500 mt-1">
+                                                        PNG, JPG up to 10MB
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                accept=".png, .jpg, .jpeg"
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setImageFile(e.target.files?.[0] || null)}
+                                                className="hidden"
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {imageFile && (
+                                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0">
+                                                <svg className="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div className="ml-3">
+                                                <p className="text-sm font-medium text-green-800">
+                                                    Image ready to upload
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="mt-8 flex justify-end">
+                            <button 
+                                onClick={submitIdea} 
+                                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3 px-8 rounded-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                            >
+                                Publish Idea
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className="col-span-1 row-span-1 col-start-4 row-start-4 flex justify-center">
-                    <button onClick={submitIdea} className="bg-blue-500 text-white rounded-lg p-4 m-6">
-                        Publish
-                    </button>
                 </div>
             </div>
-        </div>
     );
 };
 

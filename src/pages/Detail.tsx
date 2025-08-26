@@ -4,12 +4,10 @@ import InvestCard from "../components/InvestIdeaCard";
 import ProgressBar from '../components/ProgressBar';
 
 const Detail: React.FC = () => {
-  const { id } = useParams();
-  const ideaId = Number(id);
 
   // Hardcoded data
   const idea = {
-    id: BigInt(ideaId || 1),
+    id: BigInt(1),
     title: "EcoTech Solutions",
     owner: "john-doe-principal-id",
     description: "Revolutionary sustainable technology platform that connects eco-friendly startups with environmentally conscious investors. Our platform uses AI to match the right investors with green technology companies, creating a marketplace for sustainable innovation. We're building the future of clean technology investment with blockchain-powered transparency and smart contract automation.",
