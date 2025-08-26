@@ -62,6 +62,7 @@ function App() {
           <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/dashboard" element={<UserDashboard/>} />
+          <Route path="/business" element={<DashboardPage/>} />
         </Routes>
       </Router>
     </ThirdwebProvider>
