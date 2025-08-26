@@ -35,16 +35,14 @@ const Auth: React.FC = () => {
         setPrincipal(null);
     };
 
-
     return (
         <div className="flex justify-between items-center h-screen">
-            <div className="w-1/2 px-8">
-                <div className="mt-18 ml-10 mr-10">
+            <div className="w-1/2 px-8 bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15 h-full flex items-center justify-center">
+                <div className="text-center">
                     <h1 className="lg:text-2xl font-bold mb-1 md:text-2xl sm:text-l">Welcome to</h1>
-                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl sm:text:4xl">PitchNode</h1>
-                    <hr className="mb-24 1px"/>
+                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl sm:text-4xl">PitchNode</h1>
+                    <hr className="mb-8 border-gray-300"/>
                 </div>
-                <img src="../assets/welcome.svg" alt="Illustration" className=""/> 
             </div>
 
             <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">

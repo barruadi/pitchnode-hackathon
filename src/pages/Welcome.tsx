@@ -1,14 +1,13 @@
 
 function Welcome() {
     return (
-        <div className="flex justify-between items-center h-screen ">
-            <div className="w-1/2 px-8">
-                <div className="mt-18 ml-10 mr-10">
+        <div className="flex justify-between items-center h-screen bg-gradient-to-r from-[#4162FF]/15 to-[#9665FF]/15">
+            <div className="w-1/2 px-8 flex justify-center items-center">
+                <div className="text-center">
                     <h1 className="lg:text-2xl font-bold mb-1 md:text-2xl">Welcome to</h1>
-                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl">PitchNode</h1>
-                    <hr className="mb-24 1px"/>
+                    <h1 className="lg:text-7xl font-bold mb-8 md:text-6xl bg-gradient-to-r from-[#4162FF] to-[#9665FF] bg-clip-text text-transparent">PitchNode</h1>
+                    <p className="text-gray-600 text-lg">Your gateway to innovation and investment</p>
                 </div>
-                <img src="../assets/welcome.svg" alt="Illustration" className=""/> 
             </div>
 
             <div className="w-1/2 bg-[#0B031F] h-full flex justify-center items-center flex-col rounded-l-4xl">
@@ -34,24 +33,14 @@ function Welcome() {
                             Register As Investor
                             </h1>
                             <p className="text-gray-400">
-                            An investor is them who want to support and<br/>invest to innovator’s business idea.
+                            An investor is them who want to support and<br/>invest to innovator's business idea.
                             </p>
                         </div>
                     </div>
                 </a>
-
-                <p className="text-md text-gray-400 mt-10">
-                            Already have an account?{' '}
-                            <a
-                            href="/signin"
-                            className="text-[#9BAEFF] hover:underline"
-                            >
-                            Sign In
-                            </a>
-                        </p>
             </div>
         </div>
     );
-  }
+}
   
   export default Welcome;
